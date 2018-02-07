@@ -1,0 +1,66 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <title>结算记录详情</title> 
+
+<link rel="stylesheet" type="text/css" href="../../css/base.css" />
+<link rel="stylesheet" type="text/css" href="../../custom/uimaker/easyui.css" />
+<link rel="stylesheet" type="text/css" href="../../custom/uimaker/icon.css" />
+<link rel="stylesheet" type="text/css" href="../../css/custom.css" />
+<link rel="stylesheet" type="text/css" href="../../plugins/layui/css/layui.css" media="all" />
+<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css" />
+<style type="text/css">
+</style>
+</head> 
+<body>
+    <div class="container">
+       <table id="dg" class="easyui-datagrid" style="width:100%;height:640px" title="结算记录详情" data-options="
+                rownumbers:true,
+                singleSelect:false,
+                autoRowHeight:false,
+                pagination:false,
+                fitColumns:true,
+                striped:true,
+                checkOnSelect:false,
+                selectOnCheck:false,
+                collapsible:true,
+                toolbar:'#tb',
+                pageSize:10">
+            <thead>
+                <tr>
+                    <th field="nickname" width="200">会员名</th>
+                    <th field="phone" width="200">负责人手机号码</th>
+                    <th field="money" width="200">消费金额</th>
+                    <th field="createTime" width="200">消费时间</th>
+                </tr>
+            </thead>
+        </table>
+      <div id="tb" style="padding:0 30px;">
+      <form id="search-form">
+       	手机号码: 
+        <input class="easyui-textbox" type="text" id="search-phone" name="search-phone" style="width:166px;height:35px;line-height:35px;" placeholder="手机号码"/>
+        <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true" id="search-btn">查询</a>
+        <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-reload" id="reset-btn">重置</a>
+        </form>
+        
+        <div class="opt-buttons">
+        	<a href="javascript:;" class="easyui-linkbutton" id="back-btn">返回</a>
+        </div>
+      </div>
+      <!-- 分页插件 -->
+      <div id="pg" class="easyui-pagination"></div>
+      
+    </div>
+    <script type="text/javascript" src="../../custom/jquery.min.js"></script>
+    <script type="text/javascript" src="../../custom/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../custom/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../plugins/layui/layui.js"></script>
+    <script type="text/javascript" src="../../plugins/laydate/laydate.js"></script>
+    <script type="text/javascript" src="../../js/global.js"></script>
+    <script type="text/javascript" src="../../js/custom-ajax.js"></script>
+	<script type="text/javascript" src="../../js/settlement/settlement-detail.js"></script>
+</body> 
+</html>

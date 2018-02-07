@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.user.mapper.ConsumeRecordMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.user.domain.ConsumeRecord" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
+    <result column="card_id" property="cardId" jdbcType="VARCHAR" />
+    <result column="shop_total_id" property="shopTotalId" jdbcType="BIGINT" />
+    <result column="money" property="money" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="from_type" property="fromType" jdbcType="VARCHAR" />
+    <result column="from_id" property="fromId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+	  	id, user_id, shop_id, card_id, shop_total_id, money, status, create_time, is_delete, from_type, from_id
+  </sql>
+  
+  <sql id="selectRecordWhere">
+  	WHERE 1 = 1
+  	<if test="isDelete != null">AND is_delete = #{isDelete}</if>
+  	<if test="userId != null">AND user_id = #{userId}</if>
+  	<if test="shopId != null">AND shop_id = #{shopId}</if>
+  	<if test="cardId != null">AND card_id = #{cardId}</if>
+  	<if test="shopTotalId != null">AND shop_total_id =#{shopTotalId}</if>
+  	<if test="fromType != null">AND from_type = #{fromType}</if>
+  	<if test="startTime != null"><![CDATA[AND create_time >= #{startTime}]]></if>
+  	<if test="endTime != null"><![CDATA[AND create_time <= #{endTime}]]></if>
+  	<if test="searchTime != null">AND `create_time` LIKE CONCAT('', #{searchTime}, '%')</if>
+  </sql>
+  
+  <sql id="selectMapWhere">
+  	WHERE 1 = 1
+  	<if test="isDelete != null">AND cr.is_delete = #{isDelete}</if>
+  	<if test="fromType != null">AND cr.from_type = #{fromType}</if>
+  	<if test="shopId != null">AND cr.shop_id = #{shopId}</if>
+  	<if test="startTime != null"><![CDATA[AND cr.create_time >= #{startTime}]]></if>
+  	<if test="endTime != null"><![CDATA[AND cr.create_time <= #{endTime}]]></if>
+  	<if test="shopTotalId != null">AND cr.shop_total_id =#{shopTotalId}</if>
+  	<if test="phone != null">AND u.phone =#{phone}</if>
+  	<if test="userId != null">AND cr.user_id =#{userId}</if>
+  </sql>
+  
+  <sql id="selectPlateWhere">
+  	WHERE 1 = 1 
+  	<if test="startTime != null"><![CDATA[AND t.totalDay >= #{startTime}]]></if>
+  	<if test="endTime != null"><![CDATA[AND t.totalDay <= #{endTime}]]></if>
+  </sql>
+  
+  <select id="selectById" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `h_consume_record` WHERE `id` = #{id} and is_delete='0'
+  </select>
+  
+  <select id="selectCountConsumeRecord" resultType="Map" parameterType="java.util.Map">
+  	SELECT COUNT(0) AS count, IF(SUM(money) IS NULL, 0, SUM(money)) AS total
+  	FROM `h_consume_record`
+  	<include refid="selectRecordWhere" /> 
+  </select>
+  
+  <select id="selectConsumeRecordByPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `h_consume_record`
+  	<include refid="selectRecordWhere" />
+  	ORDER BY `create_time` DESC
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <select id="selectCountConsumeMap" resultType="Map" parameterType="java.util.Map">
+  	SELECT COUNT(0) AS count, IF(SUM(cr.money) IS NULL, 0, SUM(cr.money)) AS total
+  	FROM `h_consume_record` cr
+  	INNER JOIN t_user u ON cr.user_id = u.id
+  	LEFT JOIN h_shop s ON cr.shop_id = s.id
+  	<include refid="selectMapWhere" />
+  </select>
+  
+  <select id="selectConsumeRecordMap" resultType="Map" parameterType="java.util.Map">
+  	SELECT cr.id, cr.user_id AS userId, cr.shop_id AS shopId, cr.card_id AS cardId, cr.shop_total_id AS shopTotalId, cr.money, cr.status, DATE_FORMAT(cr.create_time,"%Y-%m-%d %T") AS createTime,cr.from_type AS fromType, cr.from_id AS fromId,
+  		u.user_name AS userName, IF(u.nick_name IS NULL, '', u.nick_name) AS nickname, IF(u.real_name IS NULL, '', u.real_name) AS realName, u.phone,
+  		IF(s.name IS NULL, '', s.name) AS shopName  
+  	FROM `h_consume_record` cr
+  	INNER JOIN t_user u ON cr.user_id = u.id
+  	LEFT JOIN h_shop s ON cr.shop_id = s.id
+  	<include refid="selectMapWhere" />
+  	ORDER BY cr.`create_time` DESC
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <select id="selectPlateCount" resultType="Map" parameterType="java.util.Map">
+  	SELECT COUNT(0) AS count, SUM(t.totalMoney) AS total
+	FROM (SELECT DATE_FORMAT(create_time,'%Y-%m-%d') AS totalDay, COUNT(0) AS num,SUM(money) AS totalMoney
+			FROM h_consume_record
+			GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d')
+		) t
+	<include refid="selectPlateWhere" />
+  </select>
+  
+  <select id="selectPlateTotalMap" resultType="Map" parameterType="java.util.Map">
+  	SELECT t.totalDay, t.num, t.totalMoney 
+	FROM (SELECT DATE_FORMAT(create_time,'%Y-%m-%d') AS totalDay, COUNT(0) AS num,SUM(money) AS totalMoney
+			FROM h_consume_record
+			GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d')
+		) t
+	<include refid="selectPlateWhere" />
+	ORDER BY t.totalDay DESC
+	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <select id="selectRecordByFrom" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List" />
+  	FROM h_consume_record
+  	WHERE from_id = #{fromId}
+  	AND from_type = #{fromType}
+  </select>
+  
+  <insert id="insertConsumeRecord" parameterType="com.bbsoft.core.user.domain.ConsumeRecord" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+  	INSERT INTO h_consume_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="userId != null">
+			`user_id`,
+		</if>
+		<if test="shopId != null">
+			`shop_id`,
+		</if>
+		<if test="cardId != null">
+			`card_id`,
+		</if>
+		<if test="shopTotalId != null">
+			`shop_total_id`,
+		</if>
+		<if test="money != null">
+			`money`,
+		</if>
+		<if test="status != null">
+			`status`,
+		</if>
+		<if test="createTime != null">
+			`create_time`,
+		</if>
+		<if test="isDelete != null">
+			`is_delete`,
+		</if>
+		<if test="fromType != null">
+			`from_type`,
+		</if>
+		<if test="fromId != null">
+			`from_id`,
+		</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      	<if test="userId != null">
+			#{userId},
+		</if>
+		<if test="shopId != null">
+			#{shopId},
+		</if>
+		<if test="cardId != null">
+			#{cardId},
+		</if>
+		<if test="shopTotalId != null">
+			#{shopTotalId},
+		</if>
+		<if test="money != null">
+			#{money},
+		</if>
+		<if test="status != null">
+			#{status},
+		</if>
+		<if test="createTime != null">
+			#{createTime},
+		</if>
+		<if test="isDelete != null">
+			#{isDelete},
+		</if>
+		<if test="fromType != null">
+			#{fromType},
+		</if>
+		<if test="fromId != null">
+			#{fromId},
+		</if>
+    </trim>
+  </insert>
+  
+  <update id="updateConsumeRecord" parameterType="com.bbsoft.core.user.domain.ConsumeRecord">
+  		UPDATE `h_consume_record`
+		<set>
+			<if test="userId != null">
+				user_id = #{userId},
+			</if>
+			<if test="shopId != null">
+				shop_id = #{shopId},
+			</if>
+			<if test="cardId != null">
+				card_id = #{cardId},
+			</if>
+			<if test="shopTotalId != null">
+				shop_total_id = #{shopTotalId},
+			</if>
+			<if test="money != null">
+				money = #{money},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+			<if test="fromType != null">
+				from_type = #{fromType},
+			</if>
+			<if test="fromId != null">
+				from_id = #{fromId},
+			</if>
+		</set>
+		WHERE `id` = #{id}
+  </update>
+  
+  <update id="deleteConsumeRecord">
+  	UPDATE `h_consume_record` SET is_delete = '1' WHERE id = #{id}
+  </update>
+</mapper>

@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.business.mapper.OrderMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.business.domain.Order" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
+    <result column="card_id" property="cardId" jdbcType="VARCHAR" />
+    <result column="surname" property="surname" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="BIGINT" />
+    <result column="pay_price" property="payPrice" jdbcType="BIGINT" />
+    <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+    <result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="recommend_phone" property="recommendPhone" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+   	<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="order_type" property="orderType" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="BaseColumnList">
+  	id, user_id, open_id, card_id, surname, name, price, pay_price, pay_type, pay_no, pay_time, 
+  	status, real_name, phone, address, create_time, update_time, is_delete, order_type,recommend_phone
+  </sql>
+  
+  <sql id="SelectWhere">
+  	WHERE is_delete = '0'
+  	<if test="search != null">
+  		AND (
+  		`id` LIKE CONCAT('%', #{search}, '%')
+  		OR
+  		`real_name` LIKE CONCAT('%', #{search}, '%')
+  		)
+  	</if>
+  	<if test="userId != null">
+  		AND user_id = #{userId}
+  	</if>
+  	<if test="openId != null">
+  		AND open_id = #{openId}
+  	</if>
+  	<if test="cardId != null">
+  		AND card_id = #{cardId}
+  	</if>
+  	<if test="status != null">
+  		AND status = #{status}
+  	</if>
+  	<if test="orderType != null">
+  		AND order_type = #{orderType}
+  	</if>
+  	<if test="startTime != null">
+  		<![CDATA[AND create_time > #{startTime}]]> 
+  	</if>
+  	<if test="endTime != null">
+  		<![CDATA[AND create_time < #{endTime}]]>
+  	</if>
+  </sql>
+  
+  <select id="selectOrderById" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_order
+  	WHERE id = #{id} AND is_delete = '0'
+  </select>
+  
+  <select id="selectOrderCount" resultType="Integer" parameterType="java.util.Map">
+  	SELECT COUNT(0)
+  	FROM h_order
+  	<include refid="SelectWhere" />
+  </select>
+  
+  <select id="selectOrderByPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_order
+  	<include refid="SelectWhere" />
+  	ORDER BY create_time DESC
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <select id="selectExportOrder" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_order
+  	<include refid="SelectWhere" />
+  	ORDER BY create_time DESC
+  </select>
+  
+  <select id="selectOrderByOpenId" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_order
+  	WHERE open_id = #{openId}
+  	AND order_type = #{orderType}
+  	AND status = #{status}
+  	LIMIT 1
+  </select>
+  
+  <insert id="insertOrder" parameterType="com.bbsoft.core.business.domain.Order">
+  	INSERT INTO h_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+     	<if test="id != null">
+			`id`,
+		</if>
+		<if test="userId != null">
+			`user_id`,
+		</if>
+		<if test="openId != null">
+			`open_id`,
+		</if>
+		<if test="cardId != null">
+			`card_id`,
+		</if>
+		<if test="surname != null">
+			`surname`,
+		</if>
+		<if test="name != null">
+			`name`,
+		</if>
+		<if test="price != null">
+			`price`,
+		</if>
+		<if test="payPrice != null">
+			`pay_price`,
+		</if>
+		<if test="payType != null">
+			`pay_type`,
+		</if>
+		<if test="payNo != null">
+			`pay_no`,
+		</if>
+		<if test="payTime != null">
+			`pay_time`,
+		</if>
+		<if test="createTime != null">
+			`create_time`,
+		</if>
+		<if test="updateTime != null">
+			`update_time`,
+		</if>
+		<if test="status != null">
+			`status`,
+		</if>
+		<if test="realName != null">
+			`real_name`,
+		</if>
+		<if test="phone != null">
+			`phone`,
+		</if>
+		<if test="address != null">
+			`address`,
+		</if>
+		<if test="isDelete != null">
+			`is_delete`,
+		</if>
+		<if test="orderType != null">
+			`order_type`,
+		</if>
+		<if test="recommendPhone != null">
+			`recommend_phone`,
+		</if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides="," >
+   		<if test="id != null">
+			#{id},
+		</if>
+		<if test="userId != null">
+			#{userId},
+		</if>
+		<if test="openId != null">
+			#{openId},
+		</if>
+		<if test="cardId != null">
+			#{cardId},
+		</if>
+		<if test="surname != null">
+			#{surname},
+		</if>
+		<if test="name != null">
+			#{name},
+		</if>
+		<if test="price != null">
+			#{price},
+		</if>
+		<if test="payPrice != null">
+			#{payPrice},
+		</if>
+		<if test="payType != null">
+			#{payType},
+		</if>
+		<if test="payNo != null">
+			#{payNo},
+		</if>
+		<if test="payTime != null">
+			#{payTime},
+		</if>
+		<if test="createTime != null">
+			#{createTime},
+		</if>
+		<if test="updateTime != null">
+			#{updateTime},
+		</if>
+		<if test="status != null">
+			#{status},
+		</if>
+		<if test="realName != null">
+			#{realName},
+		</if>
+		<if test="phone != null">
+			#{phone},
+		</if>
+		<if test="address != null">
+			#{address},
+		</if>
+		<if test="isDelete != null">
+			#{isDelete},
+		</if>
+		<if test="orderType != null">
+			#{orderType},
+		</if>
+		<if test="recommendPhone != null">
+			#{recommendPhone},
+		</if>
+	</trim>
+  </insert>
+  
+  <update id="updateOrder" parameterType="com.bbsoft.core.business.domain.Order">
+  	UPDATE h_order 
+  	<set>
+		<if test="userId != null">
+			user_id = #{userId},
+		</if>
+		<if test="openId != null">
+			open_id = #{openId},
+		</if>
+		<if test="cardId != null">
+			card_id = #{cardId},
+		</if>
+		<if test="surname != null">
+			surname = #{surname},
+		</if>
+		<if test="name != null">
+			name = #{name},
+		</if>
+		<if test="price != null">
+			price = #{price},
+		</if>
+		<if test="payPrice != null">
+			pay_price = #{payPrice},
+		</if>
+		<if test="payType != null">
+			pay_type = #{payType},
+		</if>
+		<if test="payNo != null">
+			pay_no = #{payNo},
+		</if>
+		<if test="payTime != null">
+			pay_time = #{payTime},
+		</if>
+		<if test="createTime != null">
+			create_time = #{createTime},
+		</if>
+		<if test="updateTime != null">
+			update_time = #{updateTime},
+		</if>
+		<if test="status != null">
+			status = #{status},
+		</if>
+		<if test="realName != null">
+			real_name = #{realName},
+		</if>
+		<if test="phone != null">
+			phone = #{phone},
+		</if>
+		<if test="address != null">
+			address = #{address},
+		</if>
+		<if test="isDelete != null">
+			is_delete = #{isDelete},
+		</if>
+		<if test="orderType != null">
+			order_type = #{orderType},
+		</if>
+		<if test="recommendPhone != null">
+			recommend_phone = #{recommendPhone},
+		</if>
+	</set>
+	WHERE id = #{id}
+  </update>
+  
+  <update id="deleteOrder">
+  	UPDATE h_order SET is_delete = '1' WHERE `id` = #{id}
+  </update>
+  
+  <update id="updateFailOrders">
+  	UPDATE h_order SET status = #{updateStatus} 
+  	WHERE id != #{orderId} 
+  	AND status = #{status} 
+  	AND open_id = #{openId} 
+  </update>
+</mapper>

@@ -1,0 +1,51 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <title>关于我们</title> 
+
+<link rel="stylesheet" type="text/css" href="../../css/base.css" />
+<link rel="stylesheet" type="text/css" href="../../custom/uimaker/easyui.css" />
+<link rel="stylesheet" type="text/css" href="../../custom/uimaker/icon.css" />
+<link rel="stylesheet" type="text/css" href="../../css/custom.css" />
+<link rel="stylesheet" type="text/css" href="../../plugins/layui/css/layui.css" media="all" />
+<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css" />
+<style type="text/css">
+</style>
+</head> 
+<body>
+    <div class="container">
+      <form id="search-form" class="layui-form">
+        <div class="layui-form-item layui-form-text">
+	    	<label class="layui-form-label">内容</label>
+		    <div class="layui-input-block">
+		      <textarea class="layui-textarea layui-hide" name="about-us" lay-verify="content" id="layui_editor"></textarea>
+		    </div>
+	  	</div>
+	  	<div class="layui-form-item">
+			<label class="layui-form-label">链接</label>
+			<div class="layui-input-block">
+				<input type="text" id="about-us-url" name="about-us-url" lay-verify="required" autocomplete="off" placeholder="关于我们链接" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label"></label>
+			<div class="opt-buttons">
+            <a href="javascript:;" class="easyui-linkbutton" id="save-info-btn" data-options="selected:true">保存</a>
+        	</div>
+		</div>
+        </form>
+      </div>
+      
+    <script type="text/javascript" src="../../custom/jquery.min.js"></script>
+    <script type="text/javascript" src="../../custom/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../custom/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../plugins/layui/layui.js"></script>
+    <script type="text/javascript" src="../../plugins/laydate/laydate.js"></script>
+    <script type="text/javascript" src="../../js/global.js"></script>
+    <script type="text/javascript" src="../../js/custom-ajax.js"></script>
+	<script type="text/javascript" src="../../js/sysset/about-us.js"></script>
+</body> 
+</html>

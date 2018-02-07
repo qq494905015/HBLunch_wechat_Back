@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.business.mapper.CardMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.business.domain.Card" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="card_name" property="cardName" jdbcType="INTEGER" />
+    <result column="surname" property="surname" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="balance" property="balance" jdbcType="BIGINT" />
+    <result column="price" property="price" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="bind_time" property="bindTime" jdbcType="TIMESTAMP" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="is_goods" property="isGoods" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+   	<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <sql id="BaseColumnList">
+  	id, user_id, open_id, product_id, card_no, code, surname, name, balance, price, type, 
+  	bind_time, start_time, end_time, status, is_goods, is_delete, create_time, update_time
+  </sql>
+  
+  <sql id="SelectWhere">
+  	WHERE is_delete = '0'
+  	<if test="search != null">
+  		AND `card_no` LIKE CONCAT('%', #{search}, '%')
+  	</if>
+  	<if test="isGoods != null">
+  		AND `is_goods` = #{isGoods}
+  	</if>
+  	<if test="productId != null">
+  		AND `product_id` = #{productId}
+  	</if>
+  	<if test="openId != null">
+  		AND `open_id` = #{openId}
+  	</if>
+  	<if test="status != null">
+  		AND `status` = #{status}
+  	</if>
+  </sql>
+  
+  <select id="selectCardById" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_card
+  	WHERE id = #{id} AND is_delete = '0'
+  </select>
+  
+  <select id="selectCountByNo" resultType="Integer">
+  	SELECT COUNT(0)
+  	FROM h_card
+  	WHERE card_no = #{cardNo} AND is_delete = '0'
+  </select>
+  
+  <select id="selectCardCount" resultType="Integer" parameterType="java.util.Map">
+  	SELECT COUNT(0)
+  	FROM h_card
+  	<include refid="SelectWhere" />
+  </select>
+  
+  <select id="selectCardByPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	SELECT <include refid="BaseColumnList" />,(SELECT p.name FROM h_product p WHERE p.id = product_id) AS card_name
+  	FROM h_card
+  	<include refid="SelectWhere" />
+  	<if test="rand != null">
+  		ORDER BY RAND()
+  	</if>
+  	<if test="rand == null">
+  		ORDER BY create_time DESC
+  	</if>
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <select id="selectCardByOnce" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_card 
+  	WHERE is_delete = '0' 
+  	AND is_goods = #{isGoods}
+  	AND user_id IS NULL
+  	AND  status = '0'
+  	LIMIT 1
+  </select>
+  
+  <select id="selectCardByNo" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_card
+  	WHERE is_delete = '0'
+  	AND card_no = #{cardNo}
+  </select>
+  
+  <select id="selectCardByUser" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_card
+  	WHERE is_delete = '0'
+  	AND user_id = #{userId}
+  </select>
+  
+  <select id="selectCardByOpenId" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_card
+  	WHERE is_delete = '0'
+  	AND status = #{status}
+  	AND open_id = #{openId}
+  </select>
+  
+  <insert id="insertCard" parameterType="com.bbsoft.core.business.domain.Card">
+  	INSERT INTO h_card
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+     	<if test="id != null">
+			`id`,
+		</if>
+		<if test="userId != null">
+			`user_id`,
+		</if>
+		<if test="openId != null">
+			`open_id`,
+		</if>
+		<if test="productId != null">
+			`product_id`,
+		</if>
+		<if test="cardNo != null">
+			`card_no`,
+		</if>
+		<if test="code != null">
+			`code`,
+		</if>
+		<if test="cardName != null">
+			`card_name`,
+		</if>
+		<if test="surname != null">
+			`surname`,
+		</if>
+		<if test="name != null">
+			`name`,
+		</if>
+		<if test="balance != null">
+			`balance`,
+		</if>
+		<if test="price != null">
+			`price`,
+		</if>
+		<if test="type != null">
+			`type`,
+		</if>
+		<if test="bindTime != null">
+			`bind_time`,
+		</if>
+		<if test="startTime != null">
+			`start_time`,
+		</if>
+		<if test="endTime != null">
+			`end_time`,
+		</if>
+		<if test="status != null">
+			`status`,
+		</if>
+		<if test="isGoods != null">
+			`is_goods`,
+		</if>
+		<if test="isDelete != null">
+			`is_delete`,
+		</if>
+		<if test="createTime != null">
+			`create_time`,
+		</if>
+		<if test="updateTime != null">
+			`update_time`,
+		</if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides="," >
+   		<if test="id != null">
+			#{id},
+		</if>
+		<if test="userId != null">
+			#{userId},
+		</if>
+		<if test="openId != null">
+			#{openId},
+		</if>
+		<if test="productId != null">
+			#{productId},
+		</if>
+		<if test="cardNo != null">
+			#{cardNo},
+		</if>
+		<if test="code != null">
+			#{code},
+		</if>
+		<if test="cardName != null">
+			#{cardName},
+		</if>
+		<if test="surname != null">
+			#{surname},
+		</if>
+		<if test="name != null">
+			#{name},
+		</if>
+		<if test="balance != null">
+			#{balance},
+		</if>
+		<if test="price != null">
+			#{price},
+		</if>
+		<if test="type != null">
+			#{type},
+		</if>
+		<if test="bindTime != null">
+			#{bindTime},
+		</if>
+		<if test="startTime != null">
+			#{startTime},
+		</if>
+		<if test="endTime != null">
+			#{endTime},
+		</if>
+		<if test="status != null">
+			#{status},
+		</if>
+		<if test="isGoods != null">
+			#{isGoods},
+		</if>
+		<if test="isDelete != null">
+			#{isDelete},
+		</if>
+		<if test="createTime != null">
+			#{createTime},
+		</if>
+		<if test="updateTime != null">
+			#{updateTime},
+		</if>
+	</trim>
+  </insert>
+  
+  <update id="updateCard" parameterType="com.bbsoft.core.business.domain.Card">
+  	UPDATE h_card 
+  	<set>
+		<if test="userId != null">
+			`user_id` = #{userId},
+		</if>
+		<if test="openId != null">
+			`open_id` = #{openId},
+		</if>
+		<if test="productId != null">
+			`product_id` = #{productId},
+		</if>
+		<if test="cardNo != null">
+			`card_no` = #{cardNo},
+		</if>
+		<if test="code != null">
+			`code` = #{code},
+		</if>
+		<if test="cardName != null">
+			`card_name` = #{cardName},
+		</if>
+		<if test="surname != null">
+			`surname` = #{surname},
+		</if>
+		<if test="name != null">
+			`name` = #{name},
+		</if>
+		<if test="balance != null">
+			`balance` = #{balance},
+		</if>
+		<if test="price != null">
+			`price` = #{price},
+		</if>
+		<if test="type != null">
+			`type` = #{type},
+		</if>
+		<if test="bindTime != null">
+			`bind_time` = #{bindTime},
+		</if>
+		<if test="startTime != null">
+			`start_time` = #{startTime},
+		</if>
+		<if test="endTime != null">
+			`end_time` = #{endTime},
+		</if>
+		<if test="status != null">
+			`status` = #{status},
+		</if>
+		<if test="isGoods != null">
+			`is_goods` = #{isGoods},
+		</if>
+		<if test="isDelete != null">
+			`is_delete` = #{isDelete},
+		</if>
+		<if test="createTime != null">
+			`create_time` = #{createTime},
+		</if>
+		`update_time` = NOW(),
+	</set>
+	WHERE id = #{id}
+  </update>
+  
+  <update id="deleteCard">
+  	UPDATE h_card SET is_delete = '1' WHERE `id` = #{id}
+  </update>
+</mapper>

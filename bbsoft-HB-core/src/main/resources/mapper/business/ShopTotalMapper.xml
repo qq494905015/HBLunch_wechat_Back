@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.business.mapper.ShopTotalMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.business.domain.ShopTotal" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="total" property="total" jdbcType="BIGINT" />
+   	<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="total_time" property="totalTime" jdbcType="VARCHAR"/>
+    <result column="status" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="BaseColumnList">
+  	st.id, st.shop_id, st.total, st.create_time, st.total_time, st.status
+  </sql>
+  
+  <sql id="SelectWhere">
+  	WHERE 1 = 1
+  	<if test="shopName != null">
+  		AND s.`name` LIKE CONCAT('%', #{shopName}, '%')
+  	</if>
+  	<if test="phone != null">
+  		AND s.`phone` LIKE CONCAT('%', #{phone}, '%')
+  	</if>
+  	<if test="shopId != null">
+  		AND st.shop_id = #{shopId}
+  	</if>
+  	<if test="status != null">
+  		AND st.status = #{status}
+  	</if>
+  	<if test="startTime != null">
+  		<![CDATA[AND st.total_time >= #{startTime}]]> 
+  	</if>
+  	<if test="endTime != null">
+  		<![CDATA[AND st.total_time <= #{endTime}]]>
+  	</if>
+  	<if test="totalTime != null">
+  		AND st.total_time = #{totalTime}
+  	</if>
+  	
+  </sql>
+  
+  <select id="selectById" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_shop_total st
+  	WHERE id = #{id}
+  </select>
+  
+  <select id="selectTotalByTime" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />, s.phone, s.name AS shop_name
+  	FROM h_shop_total st
+  	INNER JOIN h_shop s ON st.shop_id = s.id
+  	WHERE st.total_time = #{totalTime} AND st.shop_id = ${shopId}
+  </select>
+  
+  <select id="selectTotalCount" resultType="Integer" parameterType="java.util.Map">
+  	SELECT COUNT(0)
+  	FROM h_shop_total st
+  	INNER JOIN h_shop s ON st.shop_id = s.id
+  	<include refid="SelectWhere" />
+  </select>
+  
+  <select id="selectTotalByPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	SELECT <include refid="BaseColumnList" />, s.phone, s.name AS shop_name
+  	FROM h_shop_total st
+  	INNER JOIN h_shop s ON st.shop_id = s.id
+  	<include refid="SelectWhere" />
+  	ORDER BY total_time DESC
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <insert id="insertShopTotal" parameterType="com.bbsoft.core.business.domain.ShopTotal" useGeneratedKeys="true" keyColumn="id" keyProperty="id" >
+  	INSERT INTO h_shop_total
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="shopId != null">
+			`shop_id`,
+		</if>
+		<if test="total != null">
+			`total`,
+		</if>
+		<if test="createTime != null">
+			`create_time`,
+		</if>
+		<if test="totalTime != null">
+			`total_time`,
+		</if>
+		<if test="status != null">
+			`status`,
+		</if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides="," >
+   		<if test="shopId != null">
+			#{shopId},
+		</if>
+		<if test="total != null">
+			#{total},
+		</if>
+		<if test="createTime != null">
+			#{createTime},
+		</if>
+		<if test="totalTime != null">
+			#{totalTime},
+		</if>
+		<if test="status != null">
+			#{status},
+		</if>
+	</trim>
+  </insert>
+  
+  <update id="updateShopTotal" parameterType="com.bbsoft.core.business.domain.ShopTotal">
+  	UPDATE h_shop_total 
+  	<set>
+		<if test="shopId != null">
+			`shop_id` = #{shopId},
+		</if>
+		<if test="total != null">
+			`total` = #{total},
+		</if>
+		<if test="createTime != null">
+			`create_time` = #{createTime},
+		</if>
+		<if test="totalTime != null">
+			`total_time` = #{totalTime},
+		</if>
+		<if test="status != null">
+			`status` = #{status},
+		</if>
+	</set>
+	WHERE id = #{id}
+  </update>
+</mapper>

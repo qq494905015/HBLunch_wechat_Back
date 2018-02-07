@@ -1,0 +1,100 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <title>订单列表</title> 
+
+<link rel="stylesheet" type="text/css" href="../../css/base.css" />
+<link rel="stylesheet" type="text/css" href="../../custom/uimaker/easyui.css" />
+<link rel="stylesheet" type="text/css" href="../../custom/uimaker/icon.css" />
+<link rel="stylesheet" type="text/css" href="../../css/custom.css" />
+<link rel="stylesheet" type="text/css" href="../../plugins/layui/css/layui.css" media="all" />
+<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css" />
+<style type="text/css">
+</style>
+</head> 
+<body>
+    <div class="container">
+       <table id="dg" class="easyui-datagrid" style="width:100%;height:640px" title="订单列表" data-options="
+                rownumbers:true,
+                singleSelect:false,
+                autoRowHeight:false,
+                pagination:false,
+                fitColumns:true,
+                striped:true,
+                checkOnSelect:false,
+                selectOnCheck:false,
+                collapsible:true,
+                toolbar:'#tb',
+                pageSize:10">
+            <thead>
+                <tr>
+                    <th field="id" width="110">订单号</th>
+                    <th field="orderTypeName" width="60">订单类型</th>
+                    <!-- <th field="price" width="80">订单价格</th> -->
+                    <th field="cardId" width="80">会员卡号</th>
+                    <th field="payPrice" width="80">支付价格</th>
+                    <th field="payNo" width="154">支付订单号</th>
+                    <th field="payTime" width="100">支付时间</th>
+                    <th field="createTime" width="100">下单时间</th>
+                    <th field="statusName" width="60">订单状态</th>
+                    <th field="realName" width="70">收货人姓名</th>
+                    <th field="phone" width="100">联系电话</th>
+                    <th field="recommendPhone" width="100">推荐人电话</th>
+                    <th field="address" width="170">收货地址</th>
+                    <th field="surname" width="60">姓氏</th>
+                    <th field="name" width="60">名</th>
+                </tr>
+            </thead>
+        </table>
+      <div id="tb" style="padding:0 30px;">
+      <form id="search-form">
+        <span class="con-span">搜索关键字:</span> 
+        <input class="easyui-textbox" type="text" id="search" name="search" style="width:166px;height:35px;line-height:35px;" placeholder="订单号" />
+       	
+       	<span class="con-span">订单类型:</span> 
+       	<select class="easyui-combobox" id="search-order-type" name="search-order-type" style="height:35px;width:166px;">
+       	<option value="0">请选择</option>
+       	<option value="1">会员卡</option>
+       	<option value="2">充值</option>
+       	</select>
+       	<span class="con-span">订单状态:</span> 
+       	<select class="easyui-combobox" id="search-status" name="search-status" style="height:35px;width:166px;">
+       	<option value="0">请选择</option>
+       	<option value="1">待支付</option>
+       	<option value="2">支付中</option>
+       	<option value="3">支付成功</option>
+       	<option value="4">订单完成</option>
+       	<option value="5">订单失效</option>
+       	</select>
+       	<br/>
+       	开始日期:
+       	<input type="text" name="search-start-time" id="search-start-time" autocomplete="off" class="layui-input" style="width:240px;display:inline;">
+       	结束日期:
+       	<input type="text" name="search-end-time" id="search-end-time" autocomplete="off" class="layui-input" style="width:240px;display:inline;">
+       	
+        <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true" id="search-btn">查询</a>
+        <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-reload" id="reset-btn">重置</a>
+        <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-redo" id="export-btn">导出excel</a>
+        </form>
+        
+        <div class="opt-buttons">
+            <!-- <a href="javascript:;" class="easyui-linkbutton" id="add-sysuser-btn" data-options="selected:true">新增</a> -->
+        </div>
+      </div>
+      
+      <!-- 分页插件 -->
+      <div id="pg" class="easyui-pagination"></div>
+    </div>
+    <script type="text/javascript" src="../../custom/jquery.min.js"></script>
+    <script type="text/javascript" src="../../custom/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../custom/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../plugins/layui/layui.js"></script>
+    <script type="text/javascript" src="../../plugins/laydate/laydate.js"></script>
+    <script type="text/javascript" src="../../js/global.js"></script>
+    <script type="text/javascript" src="../../js/custom-ajax.js"></script>
+	<script type="text/javascript" src="../../js/order/order-list.js"></script>
+</body> 
+</html>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.user.mapper.UserBankMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.user.domain.UserBank" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="bank_no" property="bankNo" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="bank" property="bank" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+	  	id, user_id, bank_no, real_name, bank, phone, create_time, update_time, is_delete
+  </sql>
+  
+  <sql id="selectWhere">
+  	WHERE is_delete = '0'
+  	<if test="userId != null">AND user_id = #{userId}</if>
+  	<if test="bankNo != null">AND bank_no = #{bankNo}</if>
+  </sql>
+  
+  <select id="selectById" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `h_user_bank` WHERE `id` = #{id} and is_delete='0'
+  </select>
+  
+  <select id="selectCountUserBank" resultType="Integer" parameterType="java.util.Map">
+  	SELECT COUNT(0)
+  	FROM `h_user_bank`
+  	<include refid="selectWhere" /> 
+  </select>
+  
+  <select id="selectUserBankByPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `h_user_bank`
+  	<include refid="selectWhere" />
+  	ORDER BY `create_time` DESC
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <select id="selectByUser" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List" />
+  	FROM `h_user_bank`
+  	WHERE is_delete = '0' AND user_id = #{userId}
+  </select>
+  
+  <insert id="insertUserBank" parameterType="com.bbsoft.core.user.domain.UserBank" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+  	INSERT INTO h_user_bank
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="userId != null">
+			`user_id`,
+		</if>
+		<if test="bankNo != null">
+			`bank_no`,
+		</if>
+		<if test="realName != null">
+			`real_name`,
+		</if>
+		<if test="bank != null">
+			`bank`,
+		</if>
+		<if test="phone != null">
+			`phone`,
+		</if>
+		<if test="createTime != null">
+			`create_time`,
+		</if>
+		<if test="updateTime != null">
+			`update_time`,
+		</if>
+		<if test="isDelete != null">
+			`is_delete`,
+		</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      	<if test="userId != null">
+			#{userId},
+		</if>
+		<if test="bankNo != null">
+			#{bankNo},
+		</if>
+		<if test="realName != null">
+			#{realName},
+		</if>
+		<if test="bank != null">
+			#{bank},
+		</if>
+		<if test="phone != null">
+			#{phone},
+		</if>
+		<if test="createTime != null">
+			#{createTime},
+		</if>
+		<if test="updateTime != null">
+			#{updateTime},
+		</if>
+		<if test="isDelete != null">
+			#{isDelete},
+		</if>
+    </trim>
+  </insert>
+  
+  <update id="updateUserBank" parameterType="com.bbsoft.core.user.domain.UserBank">
+  		UPDATE `h_user_bank`
+		<set>
+			<if test="userId != null">
+				user_id = #{userId},
+			</if>
+			<if test="bankNo != null">
+				bank_no = #{bankNo},
+			</if>
+			<if test="realName != null">
+				real_name = #{realName},
+			</if>
+			<if test="bank != null">
+				bank = #{bank},
+			</if>
+			<if test="phone != null">
+				phone = #{phone},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		WHERE `id` = #{id}
+  </update>
+  
+  <update id="deleteUserBank">
+  	UPDATE `h_user_bank` SET is_delete = '1' WHERE id = #{id}
+  </update>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.user.mapper.UserWalletMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.user.domain.UserWallet" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="frozen_money" property="frozenMoney" jdbcType="BIGINT" />
+    <result column="commision" property="commision" jdbcType="BIGINT" />
+    <result column="balance" property="balance" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+	  	id, user_id, frozen_money, commision, balance
+  </sql>
+  
+  <select id="selectWalletByUser" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `h_user_wallet` WHERE `user_id` = #{userId}
+  </select>
+  
+  <insert id="insertWallet" parameterType="com.bbsoft.core.user.domain.UserWallet" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+  	INSERT INTO h_user_wallet
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="userId != null">
+			`user_id`,
+		</if>
+		<if test="frozenMoney != null">
+			`frozen_money`,
+		</if>
+		<if test="commision != null">
+			`commision`,
+		</if>
+		<if test="balance != null">
+			`balance`,
+		</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      	<if test="userId != null">
+			#{userId},
+		</if>
+		<if test="frozenMoney != null">
+			#{frozenMoney},
+		</if>
+		<if test="commision != null">
+			#{commision},
+		</if>
+		<if test="balance != null">
+			#{balance},
+		</if>
+    </trim>
+  </insert>
+  
+  <update id="updateWallet" parameterType="com.bbsoft.core.user.domain.UserWallet">
+  		UPDATE `h_user_wallet`
+		<set>
+			`id` = `id`,
+			<if test="frozenMoney != null">
+				frozen_money = #{frozenMoney},
+			</if>
+			<if test="commision != null">
+				commision = #{commision},
+			</if>
+			<if test="balance != null">
+				balance = #{balance},
+			</if>
+		</set>
+		WHERE `user_id` = #{userId}
+  </update>
+</mapper>

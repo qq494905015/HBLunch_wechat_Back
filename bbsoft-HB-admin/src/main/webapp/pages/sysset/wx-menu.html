@@ -1,0 +1,258 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <title>微菜单配置</title> 
+
+<link rel="stylesheet" type="text/css" href="../../css/base.css" />
+<link rel="stylesheet" type="text/css" href="../../custom/uimaker/easyui.css" />
+<link rel="stylesheet" type="text/css" href="../../custom/uimaker/icon.css" />
+<link rel="stylesheet" type="text/css" href="../../css/custom.css" />
+<link rel="stylesheet" type="text/css" href="../../plugins/layui/css/layui.css" media="all" />
+<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css" />
+<style type="text/css">
+	.wx-menu-div{margin-left:50px;margin-top:100px;}
+	.wx-menu-item{margin-top:30px;}
+</style>
+</head> 
+<body>
+    <div class="container">
+    	<form class="layui-form">
+		  <table class="layui-table" id="menu-table">
+		    <colgroup>
+		      <col width="100">
+		      <col width="500">
+		      <col>
+		    </colgroup>
+		    <thead>
+		      <tr>
+		        <th>一级菜单</th>
+		        <th>二级菜单</th>
+		      </tr> 
+		    </thead>
+		    <tbody>
+		      <tr>
+		        <td>
+		        <div class="layui-form-item" style="width:0px;">
+		        	<div class="layui-inline">
+					<div class="layui-input-inline">
+				      <input type="text" name="menu-first-1" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input" />
+				    </div>
+				    </div>
+				</div>
+				</td>
+		        <td>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name1-1" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input"/>
+				    </div>
+					<div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url1-1" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input"  style="width:350px;"/>
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth1-1" lay-skin="switch" lay-filter="switchTest" lay-text="是|否" />
+				    </div>
+				</div>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name1-2" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input"/>
+				    </div>
+				    <div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url1-2" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input"  style="width:350px;"/>
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth1-2" lay-skin="switch" lay-filter="switchTest" lay-text="是|否" />
+				    </div>
+				</div>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name1-3" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input"/>
+				    </div>
+				    <div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url1-3" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input" style="width:350px;"/>
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth1-3" lay-skin="switch" lay-filter="switchTest" lay-text="是|否"/>
+				    </div>
+				</div>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name1-4" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input"/>
+				    </div>
+				    <div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url1-4" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input" style="width:350px;" />
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth1-4" lay-skin="switch" lay-filter="switchTest" lay-text="是|否"/>
+				    </div>
+				</div>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name1-5" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input"/>
+				    </div>
+				    <div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url1-5" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input" style="width:350px;"/>
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth1-5" lay-skin="switch" lay-filter="switchTest" lay-text="是|否"/>
+				    </div>
+				</div>
+				</td>
+		      </tr>
+		      <tr>
+		        <td>
+		        <div class="layui-form-item" style="width:0px;">
+		        	<div class="layui-inline">
+					<div class="layui-input-inline">
+				      <input type="text" name="menu-first-2" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+				    </div>
+				    </div>
+				</div>
+		        </td>
+		        <td>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name2-1" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+				    </div>
+					<div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url2-1" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input" style="width:350px;">
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth2-1" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+				    </div>
+				</div>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name2-2" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+				    </div>
+				    <div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url2-2" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input" style="width:350px;">
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth2-2" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+				    </div>
+				</div>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name2-3" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+				    </div>
+				    <div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url2-3" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input" style="width:350px;">
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth2-3" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+				    </div>
+				</div>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name2-4" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+				    </div>
+				    <div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url2-4" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input" style="width:350px;">
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth2-4" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+				    </div>
+				</div>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name2-5" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+				    </div>
+				    <div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url2-5" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input" style="width:350px;">
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth2-5" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+				    </div>
+				</div>
+				</td>
+		      </tr>
+		      <tr>
+		        <td>
+		        <div class="layui-form-item" style="width:0px;">
+		        	<div class="layui-inline">
+					<div class="layui-input-inline">
+				      <input type="text" name="menu-first-3" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+				    </div>
+				    </div>
+				</div>
+		        </td>
+		        <td>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name3-1" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+				    </div>
+					<div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url3-1" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input" style="width:350px;">
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth3-1" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+				    </div>
+				</div>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name3-2" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+				    </div>
+				    <div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url3-2" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input" style="width:350px;">
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth3-2" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+				    </div>
+				</div>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name3-3" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+				    </div>
+				    <div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url3-3" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input" style="width:350px;">
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth3-3" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+				    </div>
+				</div>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name3-4" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+				    </div>
+				    <div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url3-4" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input" style="width:350px;">
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth3-4" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+				    </div>
+				</div>
+		        <div class="layui-form-item">
+					<div class="layui-input-inline">
+				      <input type="text" name="second-name3-5" lay-verify="title" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+				    </div>
+				    <div class="layui-input-inline" style="width:350px;">
+				      <input type="text" name="second-url3-5" lay-verify="title" autocomplete="off" placeholder="请输入菜单路径" class="layui-input" style="width:350px;">
+				    </div>
+				    <div class="layui-input-inline">
+				    <input type="checkbox" name="second-auth3-5" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+				    </div>
+				</div>
+		        </td>
+		      </tr>
+		    </tbody>
+		  </table>
+  		<div style="margin-top:30px;">
+  		<button type="button" id="to-save-btn" class="layui-btn layui-btn-primary" style="background:black;color:white;">保存</button>
+  		<button type="button" id="to-wechat-btn" class="layui-btn layui-btn-primary" style="background:black;color:white;">同步到微信</button>
+  		</div>
+		</form>
+    </div>
+      
+    <script type="text/javascript" src="../../custom/jquery.min.js"></script>
+    <script type="text/javascript" src="../../custom/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../custom/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../plugins/layui/layui.js"></script>
+    <script type="text/javascript" src="../../plugins/laydate/laydate.js"></script>
+    <script type="text/javascript" src="../../js/global.js"></script>
+    <script type="text/javascript" src="../../js/custom-ajax.js"></script>
+	<script type="text/javascript" src="../../js/sysset/wx-menu.js"></script>
+</body> 
+</html>

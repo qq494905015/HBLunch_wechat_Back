@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 		
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd 										
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+
+	<!-- 自动扫描controller包下的所有类，使其认为spring mvc的控制器 -->
+	<context:component-scan base-package="com.bbsoft.wechat.controller" />
+	
+ 	<!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+	<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="mappingJacksonHttpMessageConverter" /><!-- json转换器 -->
+			</list>
+		</property>
+	</bean>
+	
+    <!--返回数据中文的处理  -->
+	<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+	    <property name="supportedMediaTypes" value="text/html;charset=UTF-8" />
+	</bean> 
+	
+	<!-- 定义JSP文件的位置 -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- SpringMVC上传文件时，需要配置MultipartResolver处理器 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding">
+			<value>UTF-8</value>
+		</property>
+		<!-- 指定所上传文件的总大小不能超过限制为100m。注意maxUploadSize属性的限制不是针对单个文件，而是所有文件的容量之和 -->
+		<property name="maxUploadSize">
+			<value>104857600</value><!-- 上传文件大小限制为100M，100*1024*1024 -->
+		</property>
+		<property name="maxInMemorySize">
+			<value>409600</value>
+		</property>
+	</bean>
+
+	<!-- SpringMVC在超出上传文件限制时，会抛出org.springframework.web.multipart.MaxUploadSizeExceededException -->
+	<!-- 该异常是SpringMVC在检查上传的文件信息时抛出来的，而且此时还没有进入到Controller方法中 -->
+	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<!-- 遇到MaxUploadSizeExceededException异常时，自动跳转到/error_fileupload.jsp页面 -->
+				<prop
+					key="org.springframework.web.multipart.MaxUploadSizeExceededException">error_fileupload</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
+		<property name="config">
+			<bean class="com.google.code.kaptcha.util.Config">
+				<constructor-arg>
+					<props>
+						<prop key="kaptcha.border">no</prop>
+						<prop key="kaptcha.border.color">105,179,90</prop>
+						<prop key="kaptcha.textproducer.font.color">red</prop>
+						<prop key="kaptcha.image.width">300</prop>
+						<prop key="kaptcha.textproducer.font.size">75</prop>
+						<prop key="kaptcha.image.height">100</prop>
+						<prop key="kaptcha.session.key">code</prop>
+						<prop key="kaptcha.textproducer.char.length">4</prop>
+						<prop key="kaptcha.textproducer.font.names">宋体,楷体,微软雅黑</prop>
+					</props>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+   	<mvc:interceptors> 
+   		<mvc:interceptor> 
+	  		<!--拦截哪个包下的类例如：-->  
+   	      <mvc:mapping path="/**"/>   
+ 	  	      <bean class="com.bbsoft.wechat.interceptor.SessionInterceptor">
+	  	      		<!-- 不需要session验证的地址 -->
+					<property name="excludeUrls">
+						<list>
+							<value>/404100000</value>
+							<value>/405100000</value>
+							<value>/500100000</value>
+							<value>/cap200000</value>
+							<value>/upload200000</value>
+							<value>/cutPic200001</value>
+							
+							<value>/user100000</value>
+							<value>/user100001</value>
+							<value>/user100002</value>
+							<value>/user100003</value>
+							<value>/user100006</value>
+							
+							<value>/shop100000</value>
+							<value>/shop100001</value>
+							<value>/shop100006</value>
+							
+							<value>/card100000</value>
+							<value>/card100001</value>
+							
+							<value>/order100000</value>
+							<value>/order100001</value>
+							
+							<value>/help100000</value>
+							
+							<value>/wxPaySuccess</value>
+							<value>/wechatApi</value>
+							<value>/initMenu</value>
+							<value>/getWechatToken</value>
+							<value>/wechatAuth</value>
+							<value>/getWechatUser</value>
+							<value>/getWechatJSSDK</value>
+							<value>/getCardApiTicket</value>
+						</list>
+					</property>
+ 	  	      </bean>  
+   	    </mvc:interceptor>  
+   	</mvc:interceptors>   
+</beans> 

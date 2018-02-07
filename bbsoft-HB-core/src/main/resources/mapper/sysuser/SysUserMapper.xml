@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.sysuser.mapper.SysUserMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.sysuser.domain.SysUser" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List"> 
+	  	`id`, `user_name`, `nick_name`, `password`, `email`, `phone`, `last_login_ip`, `last_login_time`, 
+	  	`create_time`, `is_delete`, `status`, `create_by`
+  </sql>
+  
+  <sql id="selectUserWhere">
+  		AND su.`is_delete` = '0' 
+  	<if test="search != null">
+  		AND (su.`user_name` LIKE CONCAT('%', #{search}, '%')
+  		OR su.`nick_name` LIKE CONCAT('%', #{search}, '%')
+  		OR su.`email` LIKE CONCAT('%', #{search}, '%')
+  		OR su.`phone` LIKE CONCAT('%', #{search}, '%')
+  		)
+  	</if>
+  </sql>
+  
+  <select id="selectByLogin" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `t_sys_user` 
+  	WHERE `user_name` = #{userName} 
+  		AND `password` = #{password} 
+  		AND `is_delete` = '0' 
+  </select>
+  
+  
+  <select id="selectCountByName"  resultType="Integer">
+  	SELECT COUNT(0)
+  	FROM `t_sys_user` 
+  	WHERE `user_name` = #{userName}
+  	AND `is_delete` = '0' 
+  </select>
+  
+  
+  <select id="selectById" resultMap="BaseResultMap">
+  	SELECT su.`id`, su.`user_name`, su.`nick_name`, su.`password`, su.`email`, su.`phone`, su.`last_login_ip`, su.`last_login_time`, 
+	  	su.`create_time`, su.`is_delete`, su.`status`, su.`create_by`, sur.`role_id`
+  	FROM `t_sys_user` su INNER JOIN `t_sys_user_role` sur ON su.`id` = sur.`user_id`
+  	WHERE su.`id` = #{id}
+  	AND su.`is_delete` = '0' 
+  </select>
+  
+  <select id="selectByToken" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `t_sys_user` 
+  	WHERE `token` = #{token}
+  	AND `is_delete` = '0' 
+  </select>
+  
+  <select id="selectUserCount" resultType="Integer">
+  	SELECT COUNT(0)
+  	FROM `t_sys_user` su INNER JOIN `t_sys_user_role` sur ON su.`id` = sur.`user_id`
+  	WHERE 1 = 1
+  	<include refid="selectUserWhere" />
+  </select>
+  
+  <select id="selectUserByPage" resultMap="BaseResultMap">
+  	SELECT su.`id`, su.`user_name`, su.`nick_name`, su.`password`, su.`email`, su.`phone`, su.`last_login_ip`, su.`last_login_time`, 
+	  	su.`create_time`, su.`is_delete`, su.`status`, su.`create_by`, sur.`role_id`
+  	FROM `t_sys_user` su INNER JOIN `t_sys_user_role` sur ON su.`id` = sur.`user_id`
+  	WHERE 1 = 1
+  	<include refid="selectUserWhere" />
+  	ORDER BY su.`create_time` DESC
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <insert id="insertSysUser" parameterType="com.bbsoft.core.sysuser.domain.SysUser">
+  	insert into t_sys_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    	<if test="id != null">
+			`id`,
+		</if>
+     	<if test="userName != null">
+			`user_name`,
+		</if>
+		<if test="password != null">
+			`password`,
+		</if>
+     		<if test="nickName != null">
+			`nick_name`,
+		</if>
+		<if test="email != null">
+			`email`,
+		</if>
+		<if test="phone != null">
+			`phone`,
+		</if>
+		<if test="lastLoginIp != null">
+			`last_login_ip`,
+		</if>
+		<if test="lastLoginTime != null">
+			`last_login_time`,
+		</if>
+		<if test="createTime != null">
+			`create_time`,
+		</if>
+		<if test="isDelete != null">
+			`is_delete`,
+		</if>
+		<if test="status != null">
+			`status`,
+		</if>
+		<if test="createBy != null">
+			`create_by`,
+		</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    	<if test="id != null">
+			#{id},
+		</if>
+     	<if test="userName != null">
+			#{userName},
+		</if>
+		<if test="password != null">
+			#{password},
+		</if>
+     		<if test="nickName != null">
+			#{nickName},
+		</if>
+		<if test="email != null">
+			#{email},
+		</if>
+		<if test="phone != null">
+			#{phone},
+		</if>
+		<if test="lastLoginIp != null">
+			#{lastLoginIp},
+		</if>
+		<if test="lastLoginTime != null">
+			#{lastLoginTime},
+		</if>
+		<if test="createTime != null">
+			#{createTime},
+		</if>
+		<if test="isDelete != null">
+			#{isDelete},
+		</if>
+		<if test="status != null">
+			#{status},
+		</if>
+		<if test="createBy != null">
+			#{createBy},
+		</if>
+    </trim>
+  </insert>
+  
+  <update id="updateSysUser" parameterType="com.bbsoft.core.sysuser.domain.SysUser">
+  	UPDATE `t_sys_user`
+	<set>
+		<if test="userName != null">
+			`user_name` = #{userName},
+		</if>
+		<if test="password != null">
+			`password` = #{password},
+		</if>
+     		<if test="nickName != null">
+			`nick_name` = #{nickName},
+		</if>
+		<if test="email != null">
+			`email` = #{email},
+		</if>
+		<if test="phone != null">
+			`phone` = #{phone},
+		</if>
+		<if test="lastLoginIp != null">
+			`last_login_ip` = #{lastLoginIp},
+		</if>
+		<if test="lastLoginTime != null">
+			`last_login_time` = #{lastLoginTime},
+		</if>
+		<if test="isDelete != null">
+			`is_delete` = #{isDelete},
+		</if>
+		<if test="status != null">
+			`status` = #{status},
+		</if>
+		<if test="createBy != null">
+			`create_by` = #{createBy},
+		</if>
+	</set>
+	WHERE `id` = #{id}
+  </update>
+  
+</mapper>

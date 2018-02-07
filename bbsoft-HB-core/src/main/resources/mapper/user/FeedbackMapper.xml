@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.user.mapper.FeedbackMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.user.domain.Feedback" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ret_time" property="retTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+	  	id, user_id, user_name, phone, description, result, create_time, ret_time, is_delete 
+  </sql>
+  
+  <sql id="selectWhere">
+  	WHERE is_delete = '0'
+  	<if test="userId != null">AND user_id = #{userId}</if>
+  	<if test="search != null">AND (`user_name` LIKE CONCAT('%', #{search}, '%')
+  		OR `phone` LIKE CONCAT('%', #{search}, '%')
+  		)</if>
+  	<if test="startTime != null"><![CDATA[AND create_time > #{startTime}]]></if>
+  	<if test="endTime != null"><![CDATA[AND create_time < #{endTime}]]></if>
+  </sql>
+  
+  <select id="selectById" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `h_feedback` WHERE `id` = #{id} and is_delete='0'
+  </select>
+  
+  <select id="selectFeedbackCount" resultType="Integer" parameterType="java.util.Map">
+  	SELECT COUNT(0)
+  	FROM `h_feedback`
+  	<include refid="selectWhere" /> 
+  </select>
+  
+  <select id="selectFeedbackByPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `h_feedback`
+  	<include refid="selectWhere" />
+  	ORDER BY `create_time` DESC
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <select id="selectCurrCountByUser" resultType="Integer">
+  	SELECT COUNT(0)
+		FROM h_feedback 
+		WHERE `create_time` LIKE CONCAT(DATE_FORMAT(NOW(),'%Y-%m-%d'), '%')
+		AND user_id = #{userId}
+  </select>
+  
+  <insert id="insertFeedback" parameterType="com.bbsoft.core.user.domain.Feedback" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+  	INSERT INTO h_feedback
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="userId != null">
+			`user_id`,
+		</if>
+		<if test="userName != null">
+			`user_name`,
+		</if>
+		<if test="phone != null">
+			`phone`,
+		</if>
+		<if test="description != null">
+			`description`,
+		</if>
+		<if test="result != null">
+			`result`,
+		</if>
+		<if test="createTime != null">
+			`create_time`,
+		</if>
+		<if test="retTime != null">
+			`ret_time`,
+		</if>
+		<if test="isDelete != null">
+			`is_delete`,
+		</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      	<if test="userId != null">
+			#{userId},
+		</if>
+		<if test="userName != null">
+			#{userName},
+		</if>
+		<if test="phone != null">
+			#{phone},
+		</if>
+		<if test="description != null">
+			#{description},
+		</if>
+		<if test="result != null">
+			#{result},
+		</if>
+		<if test="createTime != null">
+			#{createTime},
+		</if>
+		<if test="retTime != null">
+			#{retTime},
+		</if>
+		<if test="isDelete != null">
+			#{isDelete},
+		</if>
+    </trim>
+  </insert>
+  
+  <update id="updateFeedback" parameterType="com.bbsoft.core.user.domain.Feedback">
+  		UPDATE `h_feedback`
+		<set>
+			<if test="userId != null">
+				user_id = #{userId},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName},
+			</if>
+			<if test="phone != null">
+				phone = #{phone},
+			</if>
+			<if test="description != null">
+				description = #{description},
+			</if>
+			<if test="result != null">
+				result = #{result},
+			</if>
+			<if test="retTime != null">
+				ret_time = #{retTime},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		WHERE `id` = #{id}
+  </update>
+  
+  <update id="deleteFeedback">
+  	UPDATE `h_feedback` SET is_delete = '1' WHERE id = #{id}
+  </update>
+</mapper>

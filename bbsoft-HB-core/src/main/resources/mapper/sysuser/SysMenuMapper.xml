@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.sysuser.mapper.SysMenuMapper" >
+
+	<resultMap id="BaseResultMap" type="com.bbsoft.core.sysuser.domain.SysMenu" >
+	    <id column="id" property="id" jdbcType="VARCHAR" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+	    <result column="group_name" property="groupName" jdbcType="VARCHAR" />
+	    <result column="sn" property="sn" jdbcType="INTEGER" />
+	    <result column="url" property="url" jdbcType="VARCHAR" />
+	    <result column="type" property="type" jdbcType="VARCHAR" />
+	    <result column="sort_num" property="sortNum" jdbcType="VARCHAR" />
+	    <result column="icon_class" property="iconClass" jdbcType="VARCHAR" />
+	    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+  	</resultMap>
+  	
+  	<sql id="Base_Column_List">
+  		`id`, `name`, `parent_id`, `group_name`, `sn`, `url`, `type`, `sort_num`, `icon_class`, `create_by`
+  	</sql>
+  	
+  	<select id="selectMenuByRole" resultMap="BaseResultMap">
+  		SELECT qsm.`id`, qsm.`name`, qsm.`parent_id`, qsm.`group_name`, qsm.`sn`, qsm.`url`, qsm.`type`, qsm.`sort_num`, qsm.`icon_class`, qsm.`create_by` 
+  		FROM `t_sys_menu` qsm 
+  		INNER JOIN `t_sys_role_menu` qsrm ON qsm.`id` = qsrm.`menu_id`
+  		WHERE qsrm.`role_id` = #{roleId}
+  	</select>
+  	
+  	<select id="selectMenus" resultMap="BaseResultMap">
+  		SELECT <include refid="Base_Column_List" />
+  		FROM `t_sys_menu`
+  	</select>
+
+  <insert id="insertMenuToRole">
+  	INSERT INTO `t_sys_role_menu`
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    	`id`,
+		`role_id`,
+		`menu_id`,
+		`create_time`,
+    </trim>
+    VALUES
+    <foreach collection="listMap" item="item" index="index" separator=",">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    	#{item.id},
+    	#{item.roleId},
+    	#{item.menuId},
+    	#{item.createTime},
+    </trim>
+    </foreach>
+  </insert>
+  
+  <delete id="deleteMenuByRole">
+  	DELETE FROM `t_sys_role_menu` WHERE `role_id` = #{roleId}
+  </delete>
+</mapper>

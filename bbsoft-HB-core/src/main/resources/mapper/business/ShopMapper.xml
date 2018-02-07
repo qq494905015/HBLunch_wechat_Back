@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.business.mapper.ShopMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.business.domain.Shop" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="shop_sn" property="shopSn" jdbcType="INTEGER" />
+   	<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    <result column="logo" property="logo" jdbcType="VARCHAR" />
+    <result column="is_online" property="isOnline" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="link_name" property="linkName" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="BaseColumnList">
+  	id, name, short_name, shop_sn, create_time, update_time, logo, is_online, is_delete,
+  	phone, email, longitude, latitude, address, link_name, start_time, end_time, description
+  </sql>
+  
+  <sql id="SelectWhere">
+  	WHERE is_delete = '0'
+  	<if test="search != null">
+  		AND `name` LIKE CONCAT('%', #{search}, '%')
+  	</if>
+  </sql>
+  
+  <select id="selectShopById" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_shop
+  	WHERE id = #{id} AND is_delete = '0'
+  </select>
+  
+  <select id="selectCountByName" resultType="Integer">
+  	SELECT COUNT(0)
+  	FROM h_shop
+  	WHERE name = #{name} AND is_delete = '0'
+  </select>
+  
+  <select id="selectShopCount" resultType="Integer" parameterType="java.util.Map">
+  	SELECT COUNT(0)
+  	FROM h_shop
+  	<include refid="SelectWhere" />
+  </select>
+  
+  <select id="selectShopByPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_shop
+  	<include refid="SelectWhere" />
+  	ORDER BY create_time DESC
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <select id="selectShops" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_shop
+  	<include refid="SelectWhere" />
+  	ORDER BY create_time DESC
+  </select>
+  
+  <select id="selectNearShops" resultType="Map" parameterType="java.util.Map">
+  	SELECT t.id, t.name, t.shortName, t.shopSn, t.createTime, t.updateTime, t.logo, t.isOnline, t.isDelete,
+  		t.phone, t.email, t.longitude, t.latitude, t.address, t.linkName, t.startTime, t.endTime, t.description, t.dist 
+  	FROM 
+  	(SELECT id, name, short_name AS shortName, shop_sn AS shopSn, create_time AS createTime, update_time AS updateTime, logo, 
+  	is_online AS isOnline, is_delete AS isDelete, phone, email, longitude, latitude, address, link_name AS linkName,
+  	start_time AS startTime, end_time AS endTime, description, FUN_JW_DIST(#{lng}, #{lat}, longitude, latitude) AS dist
+	FROM h_shop WHERE is_delete = '0') t
+	ORDER BY t.dist ASC 
+  </select>
+  
+  <insert id="insertShop" parameterType="com.bbsoft.core.business.domain.Shop">
+  	INSERT INTO h_shop
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+     	<if test="id != null">
+			`id`,
+		</if>
+		<if test="name != null">
+			`name`,
+		</if>
+		<if test="shortName != null">
+			`short_name`,
+		</if>
+		<if test="shopSn != null">
+			`shop_sn`,
+		</if>
+		<if test="logo != null">
+			`logo`,
+		</if>
+		<if test="isOnline != null">
+			`is_online`,
+		</if>
+		<if test="phone != null">
+			`phone`,
+		</if>
+		<if test="email != null">
+			`email`,
+		</if>
+		<if test="longitude != null">
+			`longitude`,
+		</if>
+		<if test="latitude != null">
+			`latitude`,
+		</if>
+		<if test="address != null">
+			`address`,
+		</if>
+		<if test="linkName != null">
+			`link_name`,
+		</if>
+		<if test="startTime != null">
+			`start_time`,
+		</if>
+		<if test="endTime != null">
+			`end_time`,
+		</if>
+		<if test="updateTime != null">
+			`update_time`,
+		</if>
+		<if test="description != null">
+			`description`,
+		</if>
+		`is_delete`,
+		`create_time`,
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides="," >
+   		<if test="id != null">
+			#{id},
+		</if>
+		<if test="name != null">
+			#{name},
+		</if>
+		<if test="shortName != null">
+			#{shortName},
+		</if>
+		<if test="shopSn != null">
+			#{shopSn},
+		</if>
+		<if test="logo != null">
+			#{logo},
+		</if>
+		<if test="isOnline != null">
+			#{isOnline},
+		</if>
+		<if test="phone != null">
+			#{phone},
+		</if>
+		<if test="email != null">
+			#{email},
+		</if>
+		<if test="longitude != null">
+			#{longitude},
+		</if>
+		<if test="latitude != null">
+			#{latitude},
+		</if>
+		<if test="address != null">
+			#{address},
+		</if>
+		<if test="linkName != null">
+			#{linkName},
+		</if>
+		<if test="startTime != null">
+			#{startTime},
+		</if>
+		<if test="endTime != null">
+			#{endTime},
+		</if>
+		<if test="updateTime != null">
+			#{updateTime},
+		</if>
+		<if test="description != null">
+			#{description},
+		</if>
+		'0',
+		NOW(),
+	</trim>
+  </insert>
+  
+  <update id="updateShop" parameterType="com.bbsoft.core.business.domain.Shop">
+  	UPDATE h_shop 
+  	<set>
+		<if test="name != null">
+			name = #{name},
+		</if>
+		<if test="shortName != null">
+			short_name = #{shortName},
+		</if>
+		<if test="shopSn != null">
+			shop_sn = #{shopSn},
+		</if>
+		<if test="logo != null">
+			logo = #{logo},
+		</if>
+		<if test="isOnline != null">
+			is_online = #{isOnline},
+		</if>
+		<if test="isDelete != null">
+			is_delete = #{isDelete},
+		</if>
+		<if test="phone != null">
+			phone = #{phone},
+		</if>
+		<if test="email != null">
+			email = #{email},
+		</if>
+		<if test="longitude != null">
+			longitude = #{longitude},
+		</if>
+		<if test="latitude != null">
+			latitude = #{latitude},
+		</if>
+		<if test="address != null">
+			address = #{address},
+		</if>
+		<if test="linkName != null">
+			link_name = #{linkName},
+		</if>
+		<if test="startTime != null">
+			start_time = #{startTime},
+		</if>
+		<if test="endTime != null">
+			end_time = #{endTime},
+		</if>
+		<if test="updateTime != null">
+			update_time = #{updateTime},
+		</if>
+		<if test="description != null">
+			description = #{description},
+		</if>
+	</set>
+	WHERE id = #{id}
+  </update>
+  
+  <update id="deleteShop">
+  	UPDATE h_shop SET is_delete = '1' WHERE `id` = #{id}
+  </update>
+</mapper>

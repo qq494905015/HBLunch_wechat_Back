@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.user.mapper.CashRecordMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.user.domain.CashRecord" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="bank_no" property="bankNo" jdbcType="VARCHAR" />
+    <result column="bank" property="bank" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+	  	cr.id, cr.user_id, cr.bank_no, cr.bank, cr.money, cr.status, cr.create_time, cr.update_time, cr.is_delete
+  </sql>
+  
+  <sql id="selectRecordWhere">
+  	WHERE cr.is_delete = '0'
+  	<if test="userId != null">AND cr.user_id = #{userId}</if>
+  	<if test="bankNo != null">AND cr.bank_no = #{bankNo}</if>
+  	<if test="status != null">AND cr.status =#{status}</if>
+  	<if test="startTime != null"><![CDATA[AND cr.create_time > #{startTime}]]></if>
+  	<if test="endTime != null"><![CDATA[AND cr.create_time < #{endTime}]]></if>
+  </sql>
+  
+  <select id="selectById" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `h_cash_record` AS cr WHERE cr.`id` = #{id} and cr.is_delete='0'
+  </select>
+  
+  <select id="selectCountCashRecord" resultType="Integer" parameterType="java.util.Map">
+  	SELECT COUNT(0)
+  	FROM `h_cash_record` AS cr
+  	INNER JOIN t_user u ON cr.user_id = u.id
+  	<include refid="selectRecordWhere" /> 
+  </select>
+  
+  <select id="selectCashRecordByPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	SELECT <include refid="Base_Column_List"/>, IF(u.real_name IS NULL, u.phone, u.real_name) AS real_name 
+  	FROM `h_cash_record` AS cr
+  	INNER JOIN t_user u ON cr.user_id = u.id
+  	<include refid="selectRecordWhere" />
+  	ORDER BY cr.`create_time` DESC
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <select id="selectMoneyByUser" resultType="Long">
+  	SELECT SUM(money)
+  	FROM `h_cash_record`
+  	WHERE is_delete = '0'
+  	AND user_id = #{userId} 
+  	AND status = #{status}
+  </select>
+  
+  <insert id="insertCashRecord" parameterType="com.bbsoft.core.user.domain.CashRecord" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+  	INSERT INTO h_cash_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="userId != null">
+			`user_id`,
+		</if>
+		<if test="bankNo != null">
+			`bank_no`,
+		</if>
+		<if test="bank != null">
+			`bank`,
+		</if>
+		<if test="money != null">
+			`money`,
+		</if>
+		<if test="status != null">
+			`status`,
+		</if>
+		<if test="createTime != null">
+			`create_time`,
+		</if>
+		<if test="updateTime != null">
+			`update_time`,
+		</if>
+		<if test="isDelete != null">
+			`is_delete`,
+		</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      	<if test="userId != null">
+			#{userId},
+		</if>
+		<if test="bankNo != null">
+			#{bankNo},
+		</if>
+		<if test="bank != null">
+			#{bank},
+		</if>
+		<if test="money != null">
+			#{money},
+		</if>
+		<if test="status != null">
+			#{status},
+		</if>
+		<if test="createTime != null">
+			#{createTime},
+		</if>
+		<if test="updateTime != null">
+			#{updateTime},
+		</if>
+		<if test="isDelete != null">
+			#{isDelete},
+		</if>
+    </trim>
+  </insert>
+  
+  <update id="updateCashRecord" parameterType="com.bbsoft.core.user.domain.CashRecord">
+  		UPDATE `h_cash_record`
+		<set>
+			<if test="userId != null">
+				user_id = #{userId},
+			</if>
+			<if test="bankNo != null">
+				bank_no = #{bankNo},
+			</if>
+			<if test="bank != null">
+				bank = #{bank},
+			</if>
+			<if test="money != null">
+				money = #{money},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		WHERE `id` = #{id}
+  </update>
+  
+  <update id="deleteCashRecord">
+  	UPDATE `h_cash_record` SET is_delete = '1' WHERE id = #{id}
+  </update>
+</mapper>

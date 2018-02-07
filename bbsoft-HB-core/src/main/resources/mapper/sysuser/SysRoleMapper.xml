@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.sysuser.mapper.SysRoleMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.sysuser.domain.SysRole" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="tag" property="tag" jdbcType="VARCHAR" />
+    <result column="sort_num" property="sortNum" jdbcType="INTEGER" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+	  	`id`, `role_name`, `description`, `tag`, `sort_num`, `is_delete`, `create_by`, `create_time`,`update_time`
+  </sql>
+  
+  <sql id="selectRoleWhere">
+  		AND `is_delete` = '0' 
+  	<if test="search != null">
+  		AND (`role_name` LIKE CONCAT('%', #{search}, '%')
+  		OR `description` LIKE CONCAT('%', #{search}, '%')
+  		)
+  	</if>
+  </sql>
+  
+  <select id="selectCountByName" resultType="Integer">
+  	SELECT COUNT(0)
+  	FROM `t_sys_role` 
+	WHERE `role_name` = #{roleName}
+  	AND `is_delete` = '0' 
+  </select>
+  
+  
+  <select id="selectById" resultMap="BaseResultMap" >
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `t_sys_role` 
+  	WHERE `id` = #{id}
+  	AND `is_delete` = '0' 
+  </select>
+  
+  
+  <select id="selectRoleCount" resultType="Integer">
+  	SELECT COUNT(0)
+  	FROM `t_sys_role`
+  	WHERE 1 = 1
+  	<include refid="selectRoleWhere" />
+  </select>
+  
+  <select id="selectRoleByPage" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `t_sys_role` 
+  	WHERE 1 = 1
+  	<include refid="selectRoleWhere" />
+  	ORDER BY `create_time` DESC
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <insert id="intsertRole" parameterType="com.bbsoft.core.sysuser.domain.SysRole" useGeneratedKeys="true" keyProperty="id">
+  	insert into t_sys_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+     	<if test="id != null">
+			`id`,
+		</if>
+     	<if test="roleName != null">
+			`role_name`,
+		</if>
+		<if test="description != null">
+			`description`,
+		</if>
+     	<if test="tag != null">
+			`tag`,
+		</if>
+		<if test="sortNum != null">
+			`sort_num`,
+		</if>
+		<if test="isDelete != null">
+			`is_delete`,
+		</if>
+		<if test="createTime != null">
+			`create_time`,
+		</if>
+		<if test="createBy != null">
+			`create_by`,
+		</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    	<if test="id != null">
+			#{id},
+		</if>
+    	<if test="roleName != null">
+			#{roleName},
+		</if>
+		<if test="description != null">
+			#{description},
+		</if>
+     		<if test="tag != null">
+			#{tag},
+		</if>
+		<if test="sortNum != null">
+			#{sortNum},
+		</if>
+		<if test="isDelete != null">
+			#{isDelete},
+		</if>
+		<if test="createTime != null">
+			#{createTime},
+		</if>
+		<if test="createBy != null">
+			#{createBy},
+		</if>
+    </trim>
+  </insert>
+  
+  <update id="updateRole" parameterType="com.bbsoft.core.sysuser.domain.SysRole">
+  	UPDATE `t_sys_role`
+	<set>
+		<if test="roleName != null">
+			`role_name` = #{roleName},
+		</if>
+		<if test="description != null">
+			`description` = #{description},
+		</if>
+     	<if test="tag != null">
+			`tag` = #{tag},
+		</if>
+		<if test="sortNum != null">
+			`sort_num` = #{sortNum},
+		</if>
+		<if test="isDelete != null">
+			`is_delete` = #{isDelete},
+		</if>
+		<if test="createBy != null">
+			`create_by` = #{createBy},
+		</if>
+		`update_time` = NOW(),
+	</set>
+	WHERE `id` = #{id}
+  </update>
+  
+  <update id="deleteRole">
+  	UPDATE `t_sys_role`
+  	SET `is_delete` = '1', `update_time` = NOW()
+  	WHERE `id` = #{id}
+  </update>
+  
+  <insert id="insertRoleToUser">
+  	INSERT INTO `t_sys_user_role`
+  	<trim prefix="(" suffix=")" suffixOverrides="," >
+     	<if test="id != null">
+			`id`,
+		</if>
+     	<if test="userId != null">
+			`user_id`,
+		</if>
+		<if test="roleId != null">
+			`role_id`,
+		</if>
+		`create_time`,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    	<if test="id != null">
+			#{id},
+		</if>
+    	<if test="userId != null">
+			#{userId},
+		</if>
+		<if test="roleId != null">
+			#{roleId},
+		</if>
+		NOW(),
+    </trim>
+  </insert>
+  
+  <update id="updateRoleAndUser">
+  	UPDATE `t_sys_user_role` SET `role_id` = #{roleId} WHERE `user_id` = #{userId}
+  </update>
+</mapper>

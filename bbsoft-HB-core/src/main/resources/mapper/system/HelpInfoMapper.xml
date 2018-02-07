@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.system.mapper.HelpInfoMapper" >
+
+	<resultMap id="BaseResultMap" type="com.bbsoft.core.system.domain.HelpInfo" >
+	    <id column="id" property="id" jdbcType="BIGINT" />
+	    <result column="member_notes" property="memberNotes" jdbcType="VARCHAR" />
+	    <result column="member_notes_url" property="memberNotesUrl" jdbcType="VARCHAR" />
+	    <result column="common_problem" property="commonProblem" jdbcType="VARCHAR" />
+	    <result column="common_problem_url" property="commonProblemUrl" jdbcType="VARCHAR" />
+	    <result column="about_us" property="aboutUs" jdbcType="VARCHAR" />
+	    <result column="about_us_url" property="aboutUsUrl" jdbcType="VARCHAR" />
+	    <result column="status" property="status" jdbcType="VARCHAR" />
+  	</resultMap>
+  	
+  	<sql id="Base_Column_List">
+  		`id`, `member_notes`, `member_notes_url`, `common_problem`, `common_problem_url`, `about_us`, `about_us_url`, status
+  	</sql>
+  	
+  	<select id="selectHelpById" resultMap="BaseResultMap">
+  		SELECT <include refid="Base_Column_List" /> 
+  		FROM `h_help_info` 
+  		WHERE `id` = #{id}
+  	</select>
+	
+	<select id="selectShowHelp" resultMap="BaseResultMap">
+		SELECT <include refid="Base_Column_List"/>
+		FROM `h_help_info`
+	</select>
+	
+	<select id="selectHelpCount" resultType="Integer">
+		SELECT COUNT(0)
+		FROM `h_help_info`
+	</select>
+	
+    <insert id="insertHelp" parameterType="com.bbsoft.core.system.domain.HelpInfo" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+  	INSERT INTO `h_help_info`
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="memberNotes != null">
+			`member_notes`, 
+		</if>
+		<if test="memberNotesUrl != null">
+			`member_notes_url`, 
+		</if>
+     		<if test="commonProblem != null">
+			`common_problem`, 
+		</if>
+		<if test="commonProblemUrl != null">
+			`common_problem_url`, 
+		</if>
+		<if test="aboutUs != null">
+			`about_us`, 
+		</if>
+		<if test="aboutUsUrl != null">
+			`about_us_url`,
+		</if>
+		<if test="aboutUsUrl != null">
+			`status`,
+		</if>
+    </trim>
+   <trim prefix="values (" suffix=")" suffixOverrides="," >
+     	<if test="memberNotes != null">
+			#{memberNotes},
+		</if>
+		<if test="memberNotesUrl != null">
+			#{memberNotesUrl},
+		</if>
+     		<if test="commonProblem != null">
+			#{commonProblem},
+		</if>
+		<if test="commonProblemUrl != null">
+			#{commonProblemUrl},
+		</if>
+		<if test="aboutUs != null">
+			#{aboutUs},
+		</if>
+		<if test="aboutUsUrl != null">
+			#{aboutUsUrl},
+		</if>
+		<if test="status != null">
+			#{status},
+		</if>
+    </trim>
+  </insert>
+  
+  <update id="updateHelp" parameterType="com.bbsoft.core.system.domain.HelpInfo">
+  	UPDATE `h_help_info`
+	<set>
+		<if test="memberNotes != null">
+			member_notes = #{memberNotes},
+		</if>
+		<if test="memberNotesUrl != null">
+			member_notes_url = #{memberNotesUrl},
+		</if>
+     		<if test="commonProblem != null">
+			common_problem = #{commonProblem},
+		</if>
+		<if test="commonProblemUrl != null">
+			common_problem_url = #{commonProblemUrl},
+		</if>
+		<if test="aboutUs != null">
+			about_us = #{aboutUs},
+		</if>
+		<if test="aboutUsUrl != null">
+			about_us_url = #{aboutUsUrl},
+		</if>
+		<if test="status != null">
+			status = #{status},
+		</if>
+	</set>
+	WHERE `id` = #{id}
+  </update>
+</mapper>

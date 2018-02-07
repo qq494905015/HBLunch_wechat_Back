@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.business.mapper.ScoreRuleMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.business.domain.ScoreRule" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="consume_amount" property="consumeAmount" jdbcType="BIGINT" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="BIGINT" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+   	<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="BaseColumnList">
+  	id, consume_amount, token, score, description, create_time, status, is_delete
+  </sql>
+  
+  <select id="selectById" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_score_rule
+  	WHERE id = #{id} AND is_delete = '0'
+  </select>
+  
+  <select id="selectRules" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_score_rule
+  	WHERE is_delete = '0'
+  </select>
+  
+  <select id="selectRuleByToken" resultMap="BaseResultMap">
+  	SELECT <include refid="BaseColumnList" />
+  	FROM h_score_rule
+  	WHERE is_delete = '0' AND token = #{token}
+  </select>
+    
+  <insert id="insertScoreRule" parameterType="com.bbsoft.core.business.domain.ScoreRule" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+  	INSERT INTO h_score_rule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="consumeAmount != null">
+			`consume_amount`,
+		</if>
+		<if test="token != null">
+			`token`,
+		</if>
+		<if test="score != null">
+			`score`,
+		</if>
+		<if test="description != null">
+			`description`,
+		</if>
+		<if test="isDelete != null">
+			`is_delete`,
+		</if>
+		<if test="status != null">
+			`status`,
+		</if>
+		<if test="createTime != null">
+			`create_time`,
+		</if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides="," >
+   		<if test="consumeAmount != null">
+			#{consumeAmount},
+		</if>
+		<if test="token != null">
+			#{token},
+		</if>
+		<if test="score != null">
+			#{score},
+		</if>
+		<if test="description != null">
+			#{description},
+		</if>
+		<if test="isDelete != null">
+			#{isDelete},
+		</if>
+		<if test="status != null">
+			#{status},
+		</if>
+		<if test="createTime != null">
+			#{createTime},
+		</if>
+	</trim>
+  </insert>
+  
+  <update id="updateScoreRule" parameterType="com.bbsoft.core.business.domain.ScoreRule">
+  	UPDATE h_score_rule 
+  	<set>
+		<if test="consumeAmount != null">
+			`consume_amount` = #{consumeAmount},
+		</if>
+		<if test="token != null">
+			`token` = #{token},
+		</if>
+		<if test="score != null">
+			`score` = #{score},
+		</if>
+		<if test="description != null">
+			`description` = #{description},
+		</if>
+		<if test="isDelete != null">
+			`is_delete` = #{isDelete},
+		</if>
+		<if test="status != null">
+			`status` = #{status},
+		</if>
+		<if test="createTime != null">
+			`create_time` = #{createTime},
+		</if>
+	</set>
+	WHERE id = #{id}
+  </update>
+</mapper>

@@ -1,0 +1,98 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <title>积分规则列表</title> 
+
+<link rel="stylesheet" type="text/css" href="../../css/base.css" />
+<link rel="stylesheet" type="text/css" href="../../custom/uimaker/easyui.css" />
+<link rel="stylesheet" type="text/css" href="../../custom/uimaker/icon.css" />
+<link rel="stylesheet" type="text/css" href="../../css/custom.css" />
+<link rel="stylesheet" type="text/css" href="../../plugins/layui/css/layui.css" media="all" />
+<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css" />
+<style type="text/css">
+</style>
+</head> 
+<body>
+    <div class="container">
+       <table id="dg" class="easyui-datagrid" style="width:100%;height:640px" title="积分规则列表" data-options="
+                rownumbers:true,
+                singleSelect:false,
+                autoRowHeight:false,
+                pagination:false,
+                fitColumns:true,
+                striped:true,
+                checkOnSelect:false,
+                selectOnCheck:false,
+                collapsible:true,
+                toolbar:'#tb',
+                pageSize:10">
+            <thead>
+                <tr>
+                    <th field="id" width="110">编号</th>
+                    <th field="consumeAmount" width="226">消费金额</th>
+                    <th field="token" width="226">调用标识</th>
+                    <th field="score" width="226">可获积分</th>
+                    <th field="description" width="112">规则描述</th>
+                    <th field="statusName" width="80">状态</th>
+                    <th field="createTime" width="170">创建时间</th>
+                    <th field="_operate" width="170" data-options="formatter:scoreRuleModel.getOperate,align:'center'">操作</th>
+                </tr>
+            </thead>
+        </table>
+      <div id="tb" style="padding:0 30px;">
+        <div class="opt-buttons">
+            <a href="javascript:;" class="easyui-linkbutton" id="add-rule-btn" data-options="selected:true">新增</a>
+        </div>
+      </div>
+      
+      <!-- 分页插件 -->
+      <div id="pg" class="easyui-pagination"></div>
+      
+    <div id="editRule" style="margin: 15px;display:none;">
+    <form id="edit-rule-form" class="layui-form" action="">
+		<div class="layui-form-item">
+			<label class="layui-form-label">消费金额</label>
+			<div class="layui-input-block">
+				<input type="text" name="consumeAmount" lay-verify="required" autocomplete="off" placeholder="请输入消费金额" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">调用标识</label>
+			<div class="layui-input-block">
+				<input type="text" name="token" lay-verify="required" autocomplete="off" placeholder="请输入调用标识" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">可获积分</label>
+			<div class="layui-input-block">
+				<input type="text" name="score"  autocomplete="off" placeholder="请输入可获积分" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">规则描述</label>
+			<div class="layui-input-block">
+				<input type="text" name="description"  autocomplete="off" placeholder="请输入规则描述" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">是否开启</label>
+			<div class="layui-input-block">
+	      		<input type="checkbox" checked="" name="status" lay-skin="switch" lay-filter="switchTest" lay-text="开启|禁用">
+	    	</div>
+  		</div>
+	</form>
+	</div>
+    </div>
+    <script type="text/javascript" src="../../custom/jquery.min.js"></script>
+    <script type="text/javascript" src="../../custom/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../custom/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../plugins/layui/layui.js"></script>
+    <script type="text/javascript" src="../../plugins/laydate/laydate.js"></script>
+    <script type="text/javascript" src="../../js/global.js"></script>
+    <script type="text/javascript" src="../../js/custom-ajax.js"></script>
+	<script type="text/javascript" src="../../js/score/score-rule.js"></script>
+</body> 
+</html>

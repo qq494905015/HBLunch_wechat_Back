@@ -1,0 +1,86 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <title>管理员列表</title> 
+
+<link rel="stylesheet" type="text/css" href="../../css/base.css" />
+<link rel="stylesheet" type="text/css" href="../../custom/uimaker/easyui.css" />
+<link rel="stylesheet" type="text/css" href="../../custom/uimaker/icon.css" />
+<link rel="stylesheet" type="text/css" href="../../css/custom.css" />
+<link rel="stylesheet" type="text/css" href="../../plugins/layui/css/layui.css" media="all" />
+<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.min.css" />
+<style type="text/css">
+	.auth-left{float:left;width:19%;border-right:1px solid #e6e6e6;border-bottom:1px solid #e6e6e6;}
+	.auth-right{float:left;width:78%;padding-left:10px;border-bottom:1px solid #e6e6e6;}
+</style>
+</head> 
+<body>
+    <div class="container">
+       <table id="dg" class="easyui-datagrid" style="width:100%;height:640px" title="角色列表" data-options="
+                rownumbers:true,
+                singleSelect:false,
+                autoRowHeight:false,
+                pagination:false,
+                fitColumns:true,
+                striped:true,
+                checkOnSelect:false,
+                selectOnCheck:false,
+                collapsible:true,
+                toolbar:'#tb'">
+            <thead>
+                <tr>
+                    <th field="roleName" width="110">角色名称</th>
+                    <th field="description" width="226">角色描述</th>
+                    <th field="createTime" width="170">创建时间</th>
+                    <th field="_operate" width="170" data-options="formatter:sysroleModel.getOperate,align:'center'">操作</th>
+                </tr>
+            </thead>
+        </table>
+      <div id="tb" style="padding:0 30px;">
+      <form id="search-form">
+        搜索关键字: <input class="easyui-textbox" type="text" id="search" name="search" style="width:166px;height:35px;line-height:35px;" placeholder="角色名称"></input>
+        <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-search" data-options="selected:true" id="search-btn">查询</a>
+        <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-reload" id="reset-btn">重置</a>
+        </form>
+        
+        <div class="opt-buttons">
+            <a href="javascript:;" class="easyui-linkbutton" id="add-sysrole-btn" data-options="selected:true">新增</a>
+        </div>
+      </div>
+      <!-- 分页插件 -->
+      <div id="pg" class="easyui-pagination"></div>
+      
+    <div id="editRole" style="margin: 15px;display:none;">
+    <form id="edit-role-form" class="layui-form" action="">
+		<div class="layui-form-item">
+			<label class="layui-form-label">角色名称</label>
+			<div class="layui-input-block">
+				<input type="text" name="roleName" lay-verify="required" autocomplete="off" placeholder="请输入角色名称" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">角色描述</label>
+			<div class="layui-input-block">
+				<input type="text" name="description" lay-verify="required" autocomplete="off" placeholder="请输入角色描述" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">权限选择</label>
+			<div class="layui-input-block" id="auth-list">
+			</div>
+		</div>
+	</form>
+	</div>
+    </div>
+    <script type="text/javascript" src="../../custom/jquery.min.js"></script>
+    <script type="text/javascript" src="../../custom/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../custom/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../plugins/layui/layui.js"></script>
+    <script type="text/javascript" src="../../js/global.js"></script>
+    <script type="text/javascript" src="../../js/custom-ajax.js"></script>
+	<script type="text/javascript" src="../../js/sys/sysrole.js"></script>
+</body> 
+</html>

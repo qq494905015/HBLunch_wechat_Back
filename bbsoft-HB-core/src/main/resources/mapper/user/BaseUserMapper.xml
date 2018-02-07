@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.user.mapper.BaseUserMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.user.domain.BaseUser" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <id column="shop_id" property="shopId" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="owner_uin" property="ownerUin" jdbcType="VARCHAR" />
+    <result column="wechat_no" property="wechatNo" jdbcType="VARCHAR" />
+    <result column="password" property="passWord" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="head_img" property="headImg" jdbcType="VARCHAR" />
+    <result column="info" property="info" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="bwh" property="bwh" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="VARCHAR" />
+    <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+    <result column="area_id" property="areaId" jdbcType="VARCHAR" />
+    <result column="address_detail" property="addressDetail" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="profession" property="profession" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="recommend_code" property="recommendCode" jdbcType="VARCHAR" />
+    <result column="recommend_id" property="recommendId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="is_message" property="isMessage" jdbcType="VARCHAR" />
+    <result column="lastlogin_time" property="lastloginTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="login_num" property="loginNum" jdbcType="INTEGER" />
+    <result column="pre_login_time" property="preLoginTime" jdbcType="TIMESTAMP" />
+    <result column="register_from" property="registerFrom" jdbcType="VARCHAR" />
+    <result column="pre_login_ip" property="preLoginIp" jdbcType="VARCHAR" />
+    <result column="curr_login_ip" property="currLoginIp" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+	  	id,shop_id, user_name,nick_name,owner_uin,wechat_no,
+	  	`password`,real_name,id_card, email,phone,head_img,
+	  	info,sex,height,weight,bwh,
+	  	age,birthday,province_id,city_id,area_id,
+	  	address_detail,address,profession,latitude,longitude,
+	  	token,recommend_code,recommend_id,status,is_message,
+	  	lastlogin_time,create_time,login_num,pre_login_time,register_from,
+	  	pre_login_ip,curr_login_ip,is_delete
+  </sql>
+  
+  <sql id="selectUserWhere">
+  	<if test="search != null">
+  		AND (`user_name` LIKE CONCAT('%', #{search}, '%')
+  		OR `nick_name` LIKE CONCAT('%', #{search}, '%')
+  		)
+  	</if>
+  	<if test="startTime != null"><![CDATA[AND create_time > #{startTime}]]></if>
+  	<if test="endTime != null"><![CDATA[AND create_time < #{endTime}]]></if>
+  </sql>
+  
+  <!-- 查询指定手机号的用户信息 -->
+  <select id="selectByPhone" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `t_user` WHERE `phone` = #{phone} and is_delete='1'
+  </select>
+  
+  <!-- 根据登录的账户号和密码查询用户信息 -->
+  <select id="selectByUserName"  resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `t_user` WHERE `user_name` = #{userName} and is_delete='1'
+  </select>
+  
+  <select id="selectCountByPhone" resultType="Integer">
+  	SELECT COUNT(0)
+  	FROM `t_user` WHERE `phone` = #{phone} and is_delete='1'
+  </select>
+  
+  <select id="selectCountByName" resultType="Integer">
+  	SELECT COUNT(0)
+  	FROM `t_user` WHERE `user_name` = #{userName} and is_delete='1'
+  </select>
+  
+  <select id="selectById" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `t_user` WHERE `id` = #{id} and is_delete='1'
+  </select>
+  
+  <select id="selectByToken" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `t_user` WHERE `token` = #{token} and is_delete='1'
+  </select>
+  
+  <select id="selectUserCount" resultType="Integer" parameterType="java.util.Map">
+  	SELECT COUNT(0)
+  	FROM `t_user`
+  	WHERE 1 = 1 
+  	<include refid="selectUserWhere" /> and is_delete='1'
+  </select>
+  
+  <select id="selectUserByPage" resultMap="BaseResultMap"  parameterType="java.util.Map">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `t_user` 
+  	WHERE 1 = 1 and is_delete='1'
+  	<include refid="selectUserWhere" />
+  	ORDER BY `create_time` DESC
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <select id="selectUserMapCount" parameterType="java.util.Map" resultType="Integer">
+  	SELECT COUNT(0)
+  	FROM t_user AS u
+	INNER JOIN h_user_wallet uw ON u.id = uw.user_id
+	WHERE u.is_delete = '1'
+  	<if test="phone != null">
+  		AND u.phone LIKE CONCAT('', #{phone}, '%')
+  	</if>
+  	<if test="shopId != null">
+  		AND u.id IN( 
+  			SELECT user_id FROM h_consume_record WHERE shop_id = #{shopId}
+  		)
+  	</if>
+  </select>
+  
+  <select id="selectUserMaps" resultType="Map" parameterType="java.util.Map">
+  	SELECT u.id, IF(u.wechat_no IS NULL, '', u.wechat_no) AS wechatNo, u.phone, 
+  	IF(u.real_name IS NULL, '', u.real_name) AS realName, u.user_name AS userName, u.nick_name AS nickname, IF(u.birthday IS NULL, '', u.birthday) AS birthday,
+  		uw.balance, uw.commision, uw.frozen_money AS frozenMoney
+	FROM t_user AS u
+	INNER JOIN h_user_wallet uw ON u.id = uw.user_id
+	WHERE u.is_delete = '1'
+	<if test="phone != null">
+  		AND u.phone = #{phone}
+  	</if>
+  	<if test="shopId != null">
+  		AND u.id IN( 
+  			SELECT user_id FROM h_consume_record WHERE shop_id = #{shopId}
+  		)
+  	</if>
+	ORDER BY u.`create_time` DESC
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <select id="selectUserByShop" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List" />
+  	FROM t_user
+  	WHERE shop_id = #{shopId}
+  	AND is_delete = '1'
+  	AND wechat_no IS NOT NULL
+  </select>
+  
+  <update id="updateUserPwd">
+  	UPDATE `t_user` SET `password` = #{newPwd} WHERE `id` = #{id}
+  </update>
+  
+  <insert id="insertUser" parameterType="com.bbsoft.core.user.domain.BaseUser">
+  	insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      		<if test="id != null">
+				`id`,
+			</if>
+      		<if test="shopId != null">
+				`shop_id`,
+			</if>
+			<if test="userName != null">
+				`user_name`,
+			</if>
+			<if test="nickName != null">
+				`nick_name`,
+			</if>
+			<if test="ownerUin != null">
+				`owner_uin`,
+			</if>
+			<if test="wechatNo != null">
+				`wechat_no`,
+			</if>
+			<if test="passWord != null">
+				`password`,
+			</if>
+			<if test="realName != null">
+				`real_name`,
+			</if>
+			<if test="idCard != null">
+				`id_card`,
+			</if>
+			<if test="email != null">
+				`email`,
+			</if>
+			<if test="phone != null">
+				`phone`,
+			</if>
+			<if test="headImg != null">
+				`head_img`,
+			</if>
+			<if test="info != null">
+				`info`,
+			</if>
+			<if test="sex != null">
+				`sex`,
+			</if>
+			<if test="height != null">
+				`height`,
+			</if>
+			<if test="weight != null">
+				`weight`,
+			</if>
+			<if test="bwh != null">
+				`bwh`,
+			</if>
+			<if test="age != null">
+				`age`,
+			</if>
+			<if test="birthday != null">
+				`birthday`,
+			</if>
+			<if test="provinceId != null">
+				`province_id`,
+			</if>
+			<if test="cityId != null">
+				`city_id`,
+			</if>
+			<if test="areaId != null">
+				`area_id`,
+			</if>
+			<if test="addressDetail != null">
+				`address_detail`,
+			</if>
+			<if test="address != null">
+				`address`,
+			</if>
+			<if test="profession != null">
+				`profession`,
+			</if>
+			<if test="latitude != null">
+				`latitude`,
+			</if>
+			<if test="longitude != null">
+				`longitude`,
+			</if>
+			<if test="token != null">
+				`token`,
+			</if>
+			<if test="recommendCode != null">
+				`recommend_code`,
+			</if>
+			<if test="recommendId != null">
+				`recommend_id`,
+			</if>
+			<if test="status != null">
+				`status`,
+			</if>
+			<if test="isMessage != null">
+				`is_message`,
+			</if>
+			<if test="lastloginTime != null">
+				`lastlogin_time`,
+			</if>
+			<if test="createTime != null">
+				`create_time`,
+			</if>
+			<if test="loginNum != null">
+				`login_num`,
+			</if>
+			<if test="preLoginTime != null">
+				`pre_login_time`,
+			</if>
+			<if test="registerFrom != null">
+				`register_from`,
+			</if>
+			<if test="preLoginIp != null">
+				`pre_login_ip`,
+			</if>
+			<if test="currLoginIp != null">
+				`curr_login_ip`,
+			</if>
+			<if test="isDelete != null">
+				`is_delete`,
+			</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      		<if test="id != null">
+				#{id},
+			</if>
+      		<if test="shopId != null">
+				#{shopId},
+			</if>
+			<if test="userName != null">
+				#{userName},
+			</if>
+			<if test="nickName != null">
+				#{nickName},
+			</if>
+			<if test="ownerUin != null">
+				#{ownerUin},
+			</if>
+			<if test="wechatNo != null">
+				#{wechatNo},
+			</if>
+			<if test="passWord != null">
+				#{passWord},
+			</if>
+			<if test="realName != null">
+				#{realName},
+			</if>
+			<if test="idCard != null">
+				#{idCard},
+			</if>
+			<if test="email != null">
+				#{email},
+			</if>
+			<if test="phone != null">
+				#{phone},
+			</if>
+			<if test="headImg != null">
+				#{headImg},
+			</if>
+			<if test="info != null">
+				#{info},
+			</if>
+			<if test="sex != null">
+				#{sex},
+			</if>
+			<if test="height != null">
+				#{height},
+			</if>
+			<if test="weight != null">
+				#{weight},
+			</if>
+			<if test="bwh != null">
+				#{bwh},
+			</if>
+			<if test="age != null">
+				#{age},
+			</if>
+			<if test="birthday != null">
+				#{birthday},
+			</if>
+			<if test="provinceId != null">
+				#{provinceId},
+			</if>
+			<if test="cityId != null">
+				#{cityId},
+			</if>
+			<if test="areaId != null">
+				#{areaId},
+			</if>
+			<if test="addressDetail != null">
+				#{addressDetail},
+			</if>
+			<if test="address != null">
+				#{address},
+			</if>
+			<if test="profession != null">
+				#{profession},
+			</if>
+			<if test="latitude != null">
+				#{latitude},
+			</if>
+			<if test="longitude != null">
+				#{longitude},
+			</if>
+			<if test="token != null">
+				#{token},
+			</if>
+			<if test="recommendCode != null">
+				#{recommendCode},
+			</if>
+			<if test="recommendId != null">
+				#{recommendId},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="isMessage != null">
+				#{isMessage},
+			</if>
+			<if test="lastloginTime != null">
+				#{lastloginTime},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+			<if test="loginNum != null">
+				#{loginNum},
+			</if>
+			<if test="preLoginTime != null">
+				#{preLoginTime},
+			</if>
+			<if test="registerFrom != null">
+				#{registerFrom},
+			</if>
+			<if test="preLoginIp != null">
+				#{preLoginIp},
+			</if>
+			<if test="currLoginIp != null">
+				#{currLoginIp},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete},
+			</if>
+    </trim>
+  </insert>
+  
+  <update id="updateUser" parameterType="com.bbsoft.core.user.domain.BaseUser">
+  		UPDATE `t_user`
+		<set>
+			`id` = #{id},
+			<if test="shopId != null">
+				`shop_id` = #{shopId},
+			</if>
+			<if test="userName != null">
+				`user_name` = #{userName},
+			</if>
+			<if test="nickName != null">
+				`nick_name` = #{nickName},
+			</if>
+			<if test="ownerUin != null">
+				`owner_uin` = #{ownerUin},
+			</if>
+			<if test="wechatNo != null">
+				`wechat_no` = #{wechatNo},
+			</if>
+			<if test="passWord != null">
+				`password` = #{passWord},
+			</if>
+			<if test="realName != null">
+				`real_name` = #{realName},
+			</if>
+			<if test="idCard != null">
+				`id_card` = #{idCard},
+			</if>
+			<if test="email != null">
+				`email` = #{email},
+			</if>
+			<if test="phone != null">
+				`phone` = #{phone},
+			</if>
+			<if test="headImg != null">
+				`head_img` = #{headImg},
+			</if>
+			<if test="info != null">
+				`info` = #{info},
+			</if>
+			<if test="sex != null">
+				`sex` = #{sex},
+			</if>
+			<if test="height != null">
+				`height` = #{height},
+			</if>
+			<if test="weight != null">
+				`weight` = #{weight},
+			</if>
+			<if test="bwh != null">
+				`bwh` = #{bwh},
+			</if>
+			<if test="age != null">
+				`age` = #{age},
+			</if>
+			<if test="birthday != null">
+				`birthday` = #{birthday},
+			</if>
+			<if test="provinceId != null">
+				`province_id` = #{provinceId},
+			</if>
+			<if test="cityId != null">
+				`city_id` = #{cityId},
+			</if>
+			<if test="areaId != null">
+				`area_id` = #{areaId},
+			</if>
+			<if test="addressDetail != null">
+				`address_detail` = #{addressDetail},
+			</if>
+			<if test="address != null">
+				`address` = #{address},
+			</if>
+			<if test="profession != null">
+				`profession` = #{profession},
+			</if>
+			<if test="latitude != null">
+				`latitude` = #{latitude},
+			</if>
+			<if test="longitude != null">
+				`longitude` = #{longitude},
+			</if>
+			<if test="token != null">
+				`token` = #{token},
+			</if>
+			<if test="recommendCode != null">
+				`recommend_code` = #{recommendCode},
+			</if>
+			<if test="recommendId != null">
+				`recommend_id` = #{recommendId},
+			</if>
+			<if test="status != null">
+				`status` = #{status},
+			</if>
+			<if test="isMessage != null">
+				`is_message` = #{isMessage},
+			</if>
+			<if test="lastloginTime != null">
+				`lastlogin_time` = #{lastloginTime},
+			</if>
+			<if test="createTime != null">
+				`create_time` = #{createTime},
+			</if>
+			<if test="loginNum != null">
+				`login_num` = #{loginNum},
+			</if>
+			<if test="preLoginTime != null">
+				`pre_login_time` = #{preLoginTime},
+			</if>
+			<if test="registerFrom != null">
+				`register_from` = #{registerFrom},
+			</if>
+			<if test="preLoginIp != null">
+				`pre_login_ip` = #{preLoginIp},
+			</if>
+			<if test="currLoginIp != null">
+				`curr_login_ip` = #{currLoginIp},
+			</if>
+			<if test="isDelete != null">
+				`is_delete` = #{isDelete},
+			</if>
+		</set>
+		WHERE `id` = #{id}
+  </update>
+  
+</mapper>

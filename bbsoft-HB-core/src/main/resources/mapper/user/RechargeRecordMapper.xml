@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbsoft.core.user.mapper.RechargeRecordMapper" >
+
+  <resultMap id="BaseResultMap" type="com.bbsoft.core.user.domain.RechargeRecord" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+	  	id, user_id, order_id, type, card_no, money, status, create_time, update_time, is_delete
+  </sql>
+  
+  <sql id="selectRecordWhere">
+  	WHERE is_delete = '0'
+  	<if test="userId != null">AND user_id = #{userId}</if>
+  	<if test="bankNo != null">AND bank_no = #{bankNo}</if>
+  	<if test="status != null">AND status =#{status}</if>
+  	<if test="startTime != null"><![CDATA[AND create_time > #{startTime}]]></if>
+  	<if test="endTime != null"><![CDATA[AND create_time < #{endTime}]]></if>
+  </sql>
+  
+  <select id="selectById" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `h_recharge_record` WHERE `id` = #{id} and is_delete='0'
+  </select>
+  
+  <select id="selectCountRechargeRecord" resultType="Integer" parameterType="java.util.Map">
+  	SELECT COUNT(0)
+  	FROM `h_recharge_record`
+  	<include refid="selectRecordWhere" /> 
+  </select>
+  
+  <select id="selectRechargeRecordByPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	SELECT <include refid="Base_Column_List"/>
+  	FROM `h_recharge_record`
+  	<include refid="selectRecordWhere" />
+  	ORDER BY `create_time` DESC
+  	LIMIT #{startItem}, #{pageSize}
+  </select>
+  
+  <select id="selectRecordByOrder" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List" />
+  	FROM `h_recharge_record`
+  	WHERE order_id = #{orderId} AND is_delete = '0'
+  </select>
+  
+  <insert id="insertRechargeRecord" parameterType="com.bbsoft.core.user.domain.RechargeRecord" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+  	INSERT INTO h_recharge_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="userId != null">
+			`user_id`,
+		</if>
+		<if test="orderId != null">
+			`order_id`,
+		</if>
+		<if test="type != null">
+			`type`,
+		</if>
+		<if test="cardNo != null">
+			`card_no`,
+		</if>
+		<if test="money != null">
+			`money`,
+		</if>
+		<if test="status != null">
+			`status`,
+		</if>
+		<if test="createTime != null">
+			`create_time`,
+		</if>
+		<if test="updateTime != null">
+			`update_time`,
+		</if>
+		<if test="isDelete != null">
+			`is_delete`,
+		</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      	<if test="userId != null">
+			#{userId},
+		</if>
+      	<if test="orderId != null">
+			#{orderId},
+		</if>
+		<if test="type != null">
+			#{type},
+		</if>
+		<if test="cardNo != null">
+			#{cardNo},
+		</if>
+		<if test="money != null">
+			#{money},
+		</if>
+		<if test="status != null">
+			#{status},
+		</if>
+		<if test="createTime != null">
+			#{createTime},
+		</if>
+		<if test="updateTime != null">
+			#{updateTime},
+		</if>
+		<if test="isDelete != null">
+			#{isDelete},
+		</if>
+    </trim>
+  </insert>
+  
+  <update id="updateRechargeRecord" parameterType="com.bbsoft.core.user.domain.RechargeRecord">
+  		UPDATE `h_recharge_record`
+		<set>
+			<if test="userId != null">
+				user_id = #{userId},
+			</if>
+			<if test="orderId != null">
+				order_id = #{orderId},
+			</if>
+			<if test="type != null">
+				type = #{type},
+			</if>
+			<if test="cardNo != null">
+				card_no = #{cardNo},
+			</if>
+			<if test="money != null">
+				money = #{money},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		WHERE `id` = #{id}
+  </update>
+  
+  <update id="deleteRechargeRecord">
+  	UPDATE `h_recharge_record` SET is_delete = '1' WHERE id = #{id}
+  </update>
+</mapper>
