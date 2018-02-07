@@ -45,7 +45,7 @@ public class WeChatConfig {
    /**
     * 商户APPID
     */
-   public static final String  APP_ID = "wxc149f0db5026b4ec"; 	//万味网
+   public static final String  APP_ID = "wxe13295ccbb907fa4"; 	//万味网
    
    
    /**
@@ -63,8 +63,8 @@ public class WeChatConfig {
 	/**
 	 * AppId应用ID
 	 */
-	public static final String CORPID = "wxc149f0db5026b4ec";	//万味网
-	public static final String SECRET = "8b5360f32e78e4bb9c2a6a52757a114a";	// 正式,万味网
+	public static final String CORPID = "wxe13295ccbb907fa4";	//万味网
+	public static final String SECRET = "914228db22e08329a43af3483aadd597";	// 正式,万味网
 	
-	public static final String encodingAESKey = "y9fx5rCcbovFc0aMvABkCIFbxKluzG2vGjh0fPngJC0";//万味网
+	public static final String encodingAESKey = "859e06YgTY0XyJpvA4Rcefd5XouC5qp3y4nzgnpt5rX";//万味网
 }
