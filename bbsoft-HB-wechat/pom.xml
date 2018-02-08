@@ -46,6 +46,7 @@
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-war-plugin</artifactId>
+			<version>3.0.0</version>
 			<configuration>
 				<warName>${project.artifactId}</warName>
 				<attachClasses>true</attachClasses>
@@ -54,7 +55,6 @@
 					<resource>
 						<directory>${project.basedir}/../bbsoft-HB-common/lib</directory>
 						<targetPath>WEB-INF/lib</targetPath>
-						<filtering>true</filtering>
 						<includes>
 							<include>**/*.jar</include>
 						</includes> </resource>
