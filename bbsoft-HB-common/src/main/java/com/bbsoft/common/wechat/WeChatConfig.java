@@ -56,7 +56,7 @@ public class WeChatConfig {
    /**
     * 商户账户 获取支付能力后，从邮件中得到
     */
-   public static final String  MCH_ID = "1432276502";
+   public static final String  MCH_ID = "1495104672";
    
 	public static final int AGENTID = 75;
 	public static final String TOKEN = "Ueb2VZnQHxqZRfe3fNDQk2ed8OVrMqbm";//万味网
