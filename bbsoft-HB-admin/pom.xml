@@ -51,6 +51,15 @@
 					<warName>${project.artifactId}</warName>
 					<attachClasses>true</attachClasses>
 					<outputDirectory>${project.build.directory}/war</outputDirectory>
+					<webResources>
+						<resource>
+							<directory>${project.basedir}/../bbsoft-HB-common/lib</directory>
+							<targetPath>WEB-INF/lib</targetPath>
+							<filtering>true</filtering>
+							<includes>
+								<include>**/*.jar</include>
+							</includes> </resource>
+					</webResources>
 				</configuration>
 			</plugin>
 			<!-- 跳过所有测试 -->

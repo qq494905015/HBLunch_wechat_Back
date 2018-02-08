@@ -166,7 +166,7 @@ public class AccessTokenUtil {
 		JSONObject jsonObject = HttpRequestUtil.httpRequest(requestUrl, EnumMethod.GET.name(), null);
 		// 如果请求成功
 		if (jsonObject != null) {
-			log.debug("accessToken======" + jsonObject.toString());
+			log.debug("accessToken======" + jsonObject.toString()+"==========="+appid+"============"+appsecret+"========="+requestUrl);
 			try {
 				accessToken = new AccessToken();
 				accessToken.setToken(jsonObject.getString("access_token"));
