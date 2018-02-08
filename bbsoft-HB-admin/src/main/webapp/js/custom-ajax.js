@@ -8,7 +8,7 @@
 
 //var HOST_URL = "http://localhost:8000";	//本地 
 //var HOST_URL = "http://119.29.139.49:9999/bbsoft-HB-admin" //蓝书试生产
-var HOST_URL = "http://admin.wan-we.com" //和本生产
+var HOST_URL = "http://admina.wan-we.com" //和本生产
 
 
 var AJAX_URL = {
